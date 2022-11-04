@@ -1,12 +1,11 @@
 import type { NextPage } from "next";
 import Head from "next/head";
-import styled from "styled-components";
-import BitcoinBlock from "./components/BitcoinBlock";
-import CardGrid from "./components/CardGrid";
-import GlobalContainer from "./components/common/GlobalContainer";
-import MainBlock from "./components/common/MainBlock";
-import Footer from "./components/Footer";
-import Logo from "./components/Logo";
+import BitcoinBlock from "../components/BitcoinBlock";
+import CardGrid from "../components/CardGrid";
+import GlobalContainer from "../components/common/GlobalContainer";
+import MainBlock from "../components/common/MainBlock";
+import Footer from "../components/Footer";
+import Logo from "../components/Logo";
 
 const Home: NextPage = () => {
   return (
