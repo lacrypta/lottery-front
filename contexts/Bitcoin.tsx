@@ -1,4 +1,4 @@
-import { createContext, useState } from "react";
+import { createContext, useEffect, useState } from "react";
 
 interface IBitcoinContext {
   blockNumber: number;
@@ -13,8 +13,17 @@ interface IBitcoinProviderProps {
 }
 
 export const BitcoinProvider = ({ children }: IBitcoinProviderProps) => {
-  const [blockNumber, setBlockNumber] = useState<number>(0);
+  const [blockNumber, setBlockNumber] = useState<number>(761690);
 
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setBlockNumber((n) => ++n);
+    }, 1000);
+
+    return () => {
+      clearInterval(interval);
+    };
+  }, []);
   return (
     <BitcoinContext.Provider value={{ blockNumber }}>
       {children}
