@@ -1,11 +1,22 @@
 import type { NextPage } from "next";
 import Head from "next/head";
-import BitcoinBlock from "../components/BitcoinBlock";
-import CardGrid from "../components/CardGrid";
-import GlobalContainer from "../components/common/GlobalContainer";
-import MainBlock from "../components/common/MainBlock";
+import styled from "styled-components";
 import Footer from "../components/Footer";
-import Logo from "../components/Logo";
+import Pending from "../components/Steps/Pending/Pending";
+
+const GlobalContainer = styled.div`
+  padding: 0 2rem;
+`;
+
+const MainBlock = styled.main`
+  min-height: 100vh;
+  padding: 4rem 0;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+`;
 
 const Home: NextPage = () => {
   return (
@@ -17,11 +28,7 @@ const Home: NextPage = () => {
       </Head>
 
       <MainBlock>
-        <Logo />
-
-        <BitcoinBlock />
-
-        <CardGrid />
+        <Pending />
       </MainBlock>
 
       <Footer />

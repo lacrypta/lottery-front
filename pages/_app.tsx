@@ -5,6 +5,7 @@ import { RainbowKitProvider, getDefaultWallets } from "@rainbow-me/rainbowkit";
 import { chain, configureChains, createClient, WagmiConfig } from "wagmi";
 import { publicProvider } from "wagmi/providers/public";
 import { PlayersProvider } from "../contexts/Players";
+import { StepsProvider } from "../contexts/Steps";
 
 const { chains, provider, webSocketProvider } = configureChains(
   [
@@ -18,7 +19,7 @@ const { chains, provider, webSocketProvider } = configureChains(
 );
 
 const { connectors } = getDefaultWallets({
-  appName: "Lottery ",
+  appName: "Lottery",
   chains,
 });
 
@@ -33,9 +34,11 @@ function MyApp({ Component, pageProps }: AppProps) {
   return (
     <WagmiConfig client={wagmiClient}>
       <RainbowKitProvider chains={chains}>
-        <PlayersProvider>
-          <Component {...pageProps} />
-        </PlayersProvider>
+        <StepsProvider>
+          <PlayersProvider>
+            <Component {...pageProps} />
+          </PlayersProvider>
+        </StepsProvider>
       </RainbowKitProvider>
     </WagmiConfig>
   );
