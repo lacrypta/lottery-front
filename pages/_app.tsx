@@ -7,6 +7,7 @@ import { publicProvider } from "wagmi/providers/public";
 import { PlayersProvider } from "../contexts/Players";
 import { StepsProvider } from "../contexts/Steps";
 import { BitcoinProvider } from "../contexts/Bitcoin";
+import { GameLogicProvider } from "../contexts/GameLogic";
 
 const { chains, provider, webSocketProvider } = configureChains(
   [
@@ -38,7 +39,9 @@ function MyApp({ Component, pageProps }: AppProps) {
         <StepsProvider>
           <BitcoinProvider>
             <PlayersProvider>
-              <Component {...pageProps} />
+              <GameLogicProvider>
+                <Component {...pageProps} />
+              </GameLogicProvider>
             </PlayersProvider>
           </BitcoinProvider>
         </StepsProvider>
