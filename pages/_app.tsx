@@ -8,6 +8,7 @@ import { PlayersProvider } from "../contexts/Players";
 import { StepsProvider } from "../contexts/Steps";
 import { BitcoinProvider } from "../contexts/Bitcoin";
 import { GameLogicProvider } from "../contexts/GameLogic";
+import { ConfigProvider } from "../contexts/Config";
 
 const { chains, provider, webSocketProvider } = configureChains(
   [
@@ -36,15 +37,17 @@ function MyApp({ Component, pageProps }: AppProps) {
   return (
     <WagmiConfig client={wagmiClient}>
       <RainbowKitProvider chains={chains}>
-        <StepsProvider>
-          <BitcoinProvider>
-            <PlayersProvider>
-              <GameLogicProvider>
-                <Component {...pageProps} />
-              </GameLogicProvider>
-            </PlayersProvider>
-          </BitcoinProvider>
-        </StepsProvider>
+        <ConfigProvider>
+          <StepsProvider>
+            <BitcoinProvider>
+              <PlayersProvider>
+                <GameLogicProvider>
+                  <Component {...pageProps} />
+                </GameLogicProvider>
+              </PlayersProvider>
+            </BitcoinProvider>
+          </StepsProvider>
+        </ConfigProvider>
       </RainbowKitProvider>
     </WagmiConfig>
   );

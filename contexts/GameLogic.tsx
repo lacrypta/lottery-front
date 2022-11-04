@@ -1,5 +1,6 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import { BitcoinContext } from "./Bitcoin";
+import { ConfigContext } from "./Config";
 import { PlayersContext } from "./Players";
 import { StepsContext } from "./Steps";
 
@@ -11,13 +12,12 @@ interface IGameLogicProviderProps {
   children: any;
 }
 
-const BLOCK_HIT = parseInt(process.env.NEXT_PUBLIC_BLOCK_START || "0");
-
 export const GameLogicProvider = ({ children }: IGameLogicProviderProps) => {
   // Contexts
   const { blockNumber } = useContext(BitcoinContext);
   const { setStep } = useContext(StepsContext);
   const { getWinners } = useContext(PlayersContext);
+  const { loaded, blockTarget } = useContext(ConfigContext);
 
   const [gameStarted, setGameStarted] = useState<boolean>(false);
 
@@ -28,11 +28,11 @@ export const GameLogicProvider = ({ children }: IGameLogicProviderProps) => {
   };
 
   useEffect(() => {
-    if (!gameStarted && blockNumber >= BLOCK_HIT) {
+    if (loaded && !gameStarted && blockTarget && blockNumber >= blockTarget) {
       startGame();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [blockNumber]);
+  }, [loaded, gameStarted, blockNumber, blockTarget]);
 
   return (
     <GameLogicContext.Provider value={{}}>{children}</GameLogicContext.Provider>
