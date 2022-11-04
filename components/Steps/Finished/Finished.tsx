@@ -1,4 +1,4 @@
-import BitcoinBlock from "../../BitcoinBlock";
+import WaitingBlock from "../../WaitingBlock";
 import CardGrid from "../../CardGrid";
 import Logo from "../../Logo";
 
@@ -7,7 +7,7 @@ const Finished = () => {
     <>
       <Logo />
       <h1>Finished!</h1>
-      <BitcoinBlock />
+      <WaitingBlock />
 
       <CardGrid />
     </>
