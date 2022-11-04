@@ -1,12 +1,10 @@
 import type { NextPage } from "next";
 import Head from "next/head";
 import styled from "styled-components";
-import BitcoinBlock from "./components/BitcoinBlock";
-import CardGrid from "./components/CardGrid";
-import Footer from "./components/Footer";
-import Logo from "./components/Logo";
+import Footer from "../components/Footer";
+import Pending from "../components/Steps/Pending/Pending";
 
-const Container = styled.div`
+const GlobalContainer = styled.div`
   padding: 0 2rem;
 `;
 
@@ -22,7 +20,7 @@ const MainBlock = styled.main`
 
 const Home: NextPage = () => {
   return (
-    <Container>
+    <GlobalContainer>
       <Head>
         <title>La Crypta Loteria</title>
         <meta name='description' content='Lotería de Entradas para LaBitconf' />
@@ -30,15 +28,11 @@ const Home: NextPage = () => {
       </Head>
 
       <MainBlock>
-        <Logo />
-
-        <BitcoinBlock />
-
-        <CardGrid />
+        <Pending />
       </MainBlock>
 
       <Footer />
-    </Container>
+    </GlobalContainer>
   );
 };
 
