@@ -31,9 +31,7 @@ const CardGrid = ({ winners = [], onlyWinners = false }: ICardGridProps) => {
         animationIn='zoomInRight'
         animationOut='zoomOut'
         animationInDuration={1300}
-        animationInDelay={id * staggeringDelay}
-        // animationOutDuration={1000}
-        // animationOutDelay={id * (staggeringDelay / 2)}
+        animationInDelay={id * (staggeringDelay || 60)}
         isVisible={isWinner ? true : !onlyWinners}
       >
         <Card id={id} die={!isWinner && onlyWinners} winner={isWinner} />
