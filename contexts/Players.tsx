@@ -1,4 +1,5 @@
-import { createContext, useEffect, useState } from "react";
+import { createContext, useContext, useEffect, useState } from "react";
+import { ConfigContext } from "./Config";
 
 interface IPlayersContext {
   total: number;
@@ -16,16 +17,22 @@ interface IPlayersProviderProps {
 }
 
 export const PlayersProvider = ({ children }: IPlayersProviderProps) => {
-  const [total, setTotal] = useState<number>(80);
+  const { totalPlayers, totalWinners } = useContext(ConfigContext);
   const [winners, setWinners] = useState<number[]>([]);
 
   const getWinners = () => {
     console.info("Needs to implement Get Winners!");
-    // setWinners();
+    const _winners = [];
+    for (let i = 0; i < (totalWinners || 0); i++) {
+      _winners.push(Math.round(Math.random() * (totalPlayers || 0)));
+    }
+    setWinners(_winners);
   };
 
   return (
-    <PlayersContext.Provider value={{ total, winners, getWinners }}>
+    <PlayersContext.Provider
+      value={{ total: totalPlayers || 1, winners, getWinners }}
+    >
       {children}
     </PlayersContext.Provider>
   );
