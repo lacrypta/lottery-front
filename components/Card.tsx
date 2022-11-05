@@ -23,7 +23,7 @@ const Container = styled.div`
 `;
 
 const Card = ({ id, winner }: ICardProps) => {
-  return <Container>#{id}</Container>;
+  return <Container className={winner ? "winner" : ""}>#{id}</Container>;
 };
 
 export default Card;
