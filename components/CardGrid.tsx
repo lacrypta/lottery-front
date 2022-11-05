@@ -15,14 +15,16 @@ const Container = styled.div`
 
 interface ICardGridProps {
   winners: number[];
+  onlyWinners: boolean;
 }
 
-const CardGrid = ({ winners = [] }: ICardGridProps) => {
+const CardGrid = ({ winners = [], onlyWinners = false }: ICardGridProps) => {
   const { staggeringDelay } = useContext(ConfigContext);
   const { total } = useContext(PlayersContext);
   const cards = [];
 
   for (let id = 1; id < total + 1; id++) {
+    const isWinner = winners.includes(id);
     cards.push(
       <Animated
         key={id}
@@ -30,10 +32,11 @@ const CardGrid = ({ winners = [] }: ICardGridProps) => {
         animationOut='zoomOut'
         animationInDuration={1300}
         animationInDelay={id * staggeringDelay}
-        animationOutDuration={1000}
-        isVisible={true}
+        // animationOutDuration={1000}
+        // animationOutDelay={id * (staggeringDelay / 2)}
+        isVisible={isWinner ? true : !onlyWinners}
       >
-        <Card id={id} winner={winners.includes(id)} />
+        <Card id={id} die={!isWinner && onlyWinners} winner={isWinner} />
       </Animated>
     );
   }

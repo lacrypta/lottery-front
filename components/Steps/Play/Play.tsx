@@ -17,6 +17,7 @@ const Play = () => {
   const { lotteryDelay, staggeringDelay } = useContext(ConfigContext);
 
   const [started, setStarted] = useState(false);
+  const [isFinished, setIsFinished] = useState(false);
 
   const [winnersShown, setWinnersShown] = useState<number[]>([]);
   const [showWinnerInterval, setShowWinnerInterval] = useState<NodeJS.Timer>();
@@ -34,6 +35,7 @@ const Play = () => {
 
   async function onFinishedLottery() {
     console.info("Finished lottery");
+    setIsFinished(true);
   }
 
   async function startProcess() {
@@ -77,7 +79,7 @@ const Play = () => {
       <h1>Playing...</h1>
       <h1>Block hash: {blockHash}</h1>
 
-      <CardGrid winners={winnersShown} />
+      <CardGrid onlyWinners={isFinished} winners={winnersShown} />
     </>
   );
 };
