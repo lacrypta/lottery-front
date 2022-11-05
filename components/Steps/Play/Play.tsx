@@ -64,10 +64,8 @@ const Play = () => {
       <Logo />
       <h1>Playing...</h1>
       <h1>Block hash: {blockHash}</h1>
-      <h1>Winners: {JSON.stringify(winners)}</h1>
-      <h1>Shown Winners: {JSON.stringify(winnersShown)}</h1>
 
-      <CardGrid />
+      <CardGrid winners={winnersShown} />
     </>
   );
 };
