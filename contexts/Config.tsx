@@ -6,6 +6,8 @@ interface IConfigContext {
   totalPlayers?: number;
   getBlockApiKey?: string;
   blockTarget?: number;
+  totalWinners?: number;
+  lotteryDelay?: number;
 }
 
 export const ConfigContext = createContext<IConfigContext>({
@@ -22,6 +24,9 @@ export const ConfigProvider = ({ children }: IConfigProviderProps) => {
   const [totalPlayers, setTotalPlayers] = useState<number>(0);
   const [blockTarget, setBlockTarget] = useState<number>(0);
   const [getBlockApiKey, setGetBlockApiKey] = useState<string>();
+  const [totalWinners, setTotalWinners] = useState<number>();
+  const [lotteryDelay, setLotteryDelay] = useState<number>();
+
   const [loaded, setLoaded] = useState<boolean>(false);
 
   useEffect(() => {
@@ -31,6 +36,9 @@ export const ConfigProvider = ({ children }: IConfigProviderProps) => {
         setBlockTarget(config?.blockTarget);
         setTotalPlayers(config?.players);
         setGetBlockApiKey(config?.getBlockApiKey);
+        setTotalWinners(config?.totalWinners);
+        setLotteryDelay(config?.lotteryDelay);
+
         setLoaded(true);
       },
     });
@@ -38,7 +46,14 @@ export const ConfigProvider = ({ children }: IConfigProviderProps) => {
 
   return (
     <ConfigContext.Provider
-      value={{ totalPlayers, blockTarget, getBlockApiKey, loaded }}
+      value={{
+        totalPlayers,
+        blockTarget,
+        getBlockApiKey,
+        loaded,
+        totalWinners,
+        lotteryDelay,
+      }}
     >
       {children}
     </ConfigContext.Provider>
