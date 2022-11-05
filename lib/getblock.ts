@@ -19,7 +19,6 @@ const request = async (method: string, params: any[], apiKey: string) => {
 };
 
 export const getBlockCount = async (apiKey: string): Promise<number> => {
-  console.info("getBlockCount");
   return await request("getblockcount", [], apiKey);
 };
 
@@ -27,6 +26,5 @@ export const getBlockHash = async (
   blockHeight: number,
   apiKey: string
 ): Promise<string> => {
-  console.info("getBlockHash");
   return await request("getblockhash", [blockHeight], apiKey);
 };

@@ -1,3 +1,4 @@
+import { connectorsForWallets } from "@rainbow-me/rainbowkit";
 import { createContext, useContext, useEffect, useState } from "react";
 import { getBlockCount, getBlockHash } from "../lib/getblock";
 import { ConfigContext } from "./Config";
@@ -27,6 +28,11 @@ export const BitcoinProvider = ({ children }: IBitcoinProviderProps) => {
       return;
     }
     setListening(true);
+
+    const _interval = setInterval(() => {
+      refreshBlock();
+    }, 5000);
+
     async function refreshBlock() {
       if (!getBlockApiKey || finished) {
         return;
@@ -38,16 +44,14 @@ export const BitcoinProvider = ({ children }: IBitcoinProviderProps) => {
       if (blockTarget && currentBlock >= blockTarget) {
         setBlockHash(await getBlockHash(blockTarget, getBlockApiKey));
         setFinished(true);
+        clearInterval(_interval);
       }
       setBlockNumber(currentBlock);
     }
 
     refreshBlock();
-
-    setInterval(() => {
-      refreshBlock();
-    }, 5000);
-  }, [blockTarget, getBlockApiKey, listening]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [blockTarget, getBlockApiKey, listening, finished]);
   return (
     <BitcoinContext.Provider value={{ blockNumber, blockHash }}>
       {children}

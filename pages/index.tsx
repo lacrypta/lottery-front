@@ -22,12 +22,6 @@ const MainBlock = styled.main`
   align-items: center;
 `;
 
-const steps = [
-  <Pending key='pending' />,
-  <Play key='play' />,
-  <Finished key='finished' />,
-];
-
 const Home: NextPage = () => {
   const { step } = useContext(StepsContext);
   return (
@@ -37,7 +31,11 @@ const Home: NextPage = () => {
         <meta name='description' content='Lotería de Entradas para LaBitconf' />
         <link rel='icon' href='/favicon.ico' />
       </Head>
-      <MainBlock>{steps[step]}</MainBlock>
+      <MainBlock>
+        {step === 0 ? <Pending /> : ""}
+        {step === 1 ? <Play key='play' /> : ""}
+        {step === 2 ? <Finished /> : ""}
+      </MainBlock>
 
       <Footer />
     </GlobalContainer>
