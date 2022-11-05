@@ -10,12 +10,16 @@ const Container = styled.div`
   flex-wrap: wrap;
 `;
 
-const CardGrid = () => {
+interface ICardGridProps {
+  winners: number[];
+}
+
+const CardGrid = ({ winners = [] }: ICardGridProps) => {
   const { total } = useContext(PlayersContext);
   const cards = [];
 
   for (let id = 1; id < total + 1; id++) {
-    cards.push(<Card key={id} id={id} winner={false} />);
+    cards.push(<Card key={id} id={id} winner={winners.includes(id)} />);
   }
 
   return <Container>{cards}</Container>;
