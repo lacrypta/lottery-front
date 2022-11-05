@@ -8,6 +8,7 @@ interface IConfigContext {
   blockTarget?: number;
   totalWinners?: number;
   lotteryDelay?: number;
+  staggeringDelay?: number;
 }
 
 export const ConfigContext = createContext<IConfigContext>({
@@ -25,6 +26,7 @@ export const ConfigProvider = ({ children }: IConfigProviderProps) => {
   const [blockTarget, setBlockTarget] = useState<number>(0);
   const [getBlockApiKey, setGetBlockApiKey] = useState<string>();
   const [totalWinners, setTotalWinners] = useState<number>();
+  const [staggeringDelay, setStaggeringDelay] = useState<number>(60);
   const [lotteryDelay, setLotteryDelay] = useState<number>();
 
   const [loaded, setLoaded] = useState<boolean>(false);
@@ -38,6 +40,7 @@ export const ConfigProvider = ({ children }: IConfigProviderProps) => {
         setGetBlockApiKey(config?.getBlockApiKey);
         setTotalWinners(config?.totalWinners);
         setLotteryDelay(config?.lotteryDelay);
+        setStaggeringDelay(config?.staggeringDelay);
 
         setLoaded(true);
       },
@@ -53,6 +56,7 @@ export const ConfigProvider = ({ children }: IConfigProviderProps) => {
         loaded,
         totalWinners,
         lotteryDelay,
+        staggeringDelay,
       }}
     >
       {children}
