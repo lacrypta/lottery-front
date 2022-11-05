@@ -8,8 +8,6 @@ const Pending = () => {
       <Logo />
 
       <WaitingBlock />
-
-      <CardGrid />
     </>
   );
 };
