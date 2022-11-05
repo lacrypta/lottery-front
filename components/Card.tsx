@@ -2,7 +2,6 @@ import styled, { keyframes } from "styled-components";
 
 interface ICardProps {
   id: number;
-  visible: boolean;
   die: boolean;
   winner: boolean;
 }
