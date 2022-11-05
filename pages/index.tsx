@@ -28,6 +28,11 @@ const steps = [
   <Finished key='finished' />,
 ];
 
+const getStep = (step: number): JSX.Element => {
+  const Component = [Pending, Play, Finished][step];
+  return <Component />;
+};
+
 const Home: NextPage = () => {
   const { step } = useContext(StepsContext);
   return (
@@ -37,7 +42,7 @@ const Home: NextPage = () => {
         <meta name='description' content='Lotería de Entradas para LaBitconf' />
         <link rel='icon' href='/favicon.ico' />
       </Head>
-      <MainBlock>{steps[step]}</MainBlock>
+      <MainBlock>{getStep(step)}</MainBlock>
 
       <Footer />
     </GlobalContainer>
