@@ -1,5 +1,10 @@
 import { createContext, useContext, useEffect, useState } from "react";
+import { useContract, useProvider } from "wagmi";
 import { ConfigContext } from "./Config";
+
+import lotteryAbi from "../abi/ILottery.json";
+import { BigNumber } from "ethers";
+import { BitcoinContext } from "./Bitcoin";
 
 interface IPlayersContext {
   total: number;
@@ -19,14 +24,25 @@ interface IPlayersProviderProps {
 export const PlayersProvider = ({ children }: IPlayersProviderProps) => {
   const { totalPlayers, totalWinners } = useContext(ConfigContext);
   const [winners, setWinners] = useState<number[]>([]);
+  const { contractAddress } = useContext(ConfigContext);
+  const { blockHash } = useContext(BitcoinContext);
 
-  const getWinners = () => {
-    console.info("Needs to implement Get Winners!");
-    const _winners = [];
-    for (let i = 0; i < (totalWinners || 0); i++) {
-      _winners.push(Math.round(Math.random() * (totalPlayers || 0)));
-    }
-    setWinners(_winners);
+  const provider = useProvider();
+
+  const contract = useContract({
+    address: contractAddress,
+    abi: lotteryAbi,
+    signerOrProvider: provider,
+  });
+
+  const getWinners = async () => {
+    const _winners = await contract?.simulate([
+      "0x" + blockHash,
+      totalPlayers,
+      totalWinners,
+    ]);
+
+    setWinners(_winners.map((n: BigNumber) => parseInt(n.toString())));
   };
 
   return (

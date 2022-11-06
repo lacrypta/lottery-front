@@ -9,6 +9,7 @@ interface IConfigContext {
   totalWinners?: number;
   lotteryDelay?: number;
   staggeringDelay?: number;
+  contractAddress?: string;
 }
 
 export const ConfigContext = createContext<IConfigContext>({
@@ -28,6 +29,7 @@ export const ConfigProvider = ({ children }: IConfigProviderProps) => {
   const [totalWinners, setTotalWinners] = useState<number>();
   const [staggeringDelay, setStaggeringDelay] = useState<number>(60);
   const [lotteryDelay, setLotteryDelay] = useState<number>();
+  const [contractAddress, setContractAddress] = useState<string>();
 
   const [loaded, setLoaded] = useState<boolean>(false);
 
@@ -41,6 +43,7 @@ export const ConfigProvider = ({ children }: IConfigProviderProps) => {
         setTotalWinners(config?.totalWinners);
         setLotteryDelay(config?.lotteryDelay);
         setStaggeringDelay(config?.staggeringDelay);
+        setContractAddress(config?.contractAddress);
 
         setLoaded(true);
       },
@@ -57,6 +60,7 @@ export const ConfigProvider = ({ children }: IConfigProviderProps) => {
         totalWinners,
         lotteryDelay,
         staggeringDelay,
+        contractAddress,
       }}
     >
       {children}
