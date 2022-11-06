@@ -4,12 +4,15 @@ import React, { useContext, useEffect, useState } from "react";
 import { BitcoinContext } from "../../../contexts/Bitcoin";
 import { PlayersContext } from "../../../contexts/Players";
 import { ConfigContext } from "../../../contexts/Config";
+import Countdown from "../../Countdown/Countdown";
 
 const delay = (time: number) => {
   return new Promise((resolve) => {
     setTimeout(resolve, time);
   });
 };
+
+const COUNTDOWN_NUMBERS = 10;
 
 const Play = () => {
   const { blockHash } = useContext(BitcoinContext);
@@ -18,6 +21,7 @@ const Play = () => {
 
   const [started, setStarted] = useState(false);
   const [isFinished, setIsFinished] = useState(false);
+  const [countdownStarted, setCountdownStarted] = useState(false);
 
   const [winnersShown, setWinnersShown] = useState<number[]>([]);
   const [showWinnerInterval, setShowWinnerInterval] = useState<NodeJS.Timer>();
@@ -33,6 +37,13 @@ const Play = () => {
     );
   }
 
+  async function startCountdown() {
+    setCountdownStarted(true);
+    setTimeout(() => {
+      startLottery();
+    }, (COUNTDOWN_NUMBERS + 1) * 1000);
+  }
+
   async function onFinishedLottery() {
     console.info("Finished lottery");
     setIsFinished(true);
@@ -44,7 +55,7 @@ const Play = () => {
     }
 
     setTimeout(() => {
-      startLottery();
+      startCountdown();
     }, staggeringDelay * total + lotteryDelay);
   }
 
@@ -78,7 +89,7 @@ const Play = () => {
       <Logo />
       <h1>Playing...</h1>
       <h1>Block hash: {blockHash}</h1>
-
+      <Countdown play={countdownStarted} limit={COUNTDOWN_NUMBERS} />
       <CardGrid onlyWinners={isFinished} winners={winnersShown} />
     </>
   );
