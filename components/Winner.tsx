@@ -27,7 +27,7 @@ const Winner = ({ value }: IWinnerProps) => {
   useEffect(() => {
     setTimeout(() => {
       setIsVisible(false);
-    }, 800);
+    }, 2500);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -37,8 +37,8 @@ const Winner = ({ value }: IWinnerProps) => {
         animationIn='tada'
         animationOut='zoomOut'
         // animationInDelay={delay}
-        animationInDuration={300}
-        animationOutDuration={300}
+        animationInDuration={400}
+        animationOutDuration={700}
         isVisible={isVisible}
       >
         <div>{value}</div>
