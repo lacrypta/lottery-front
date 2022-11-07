@@ -15,7 +15,7 @@ const delay = (time: number) => {
   });
 };
 
-const COUNTDOWN_NUMBERS = 2;
+const COUNTDOWN_NUMBERS = 10;
 
 const Play = () => {
   const { blockHash, blockNumber } = useContext(BitcoinContext);
