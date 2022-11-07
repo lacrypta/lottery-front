@@ -3,7 +3,7 @@ import "@rainbow-me/rainbowkit/styles.css";
 import type { AppProps } from "next/app";
 import { RainbowKitProvider, getDefaultWallets } from "@rainbow-me/rainbowkit";
 import { chain, configureChains, createClient, WagmiConfig } from "wagmi";
-import { publicProvider } from "wagmi/providers/public";
+import { infuraProvider } from "wagmi/providers/infura";
 import { PlayersProvider } from "../contexts/Players";
 import { StepsProvider } from "../contexts/Steps";
 import { BitcoinProvider } from "../contexts/Bitcoin";
@@ -11,18 +11,12 @@ import { GameLogicProvider } from "../contexts/GameLogic";
 import { ConfigProvider } from "../contexts/Config";
 
 const { chains, provider, webSocketProvider } = configureChains(
-  [
-    chain.mainnet,
-    chain.polygon,
-    ...(process.env.NEXT_PUBLIC_ENABLE_TESTNETS === "true"
-      ? [chain.goerli, chain.kovan, chain.rinkeby, chain.ropsten]
-      : []),
-  ],
-  [publicProvider()]
+  [chain.polygon],
+  [infuraProvider({ apiKey: "12519b77348a4af88497f5c70e98b631" })]
 );
 
 const { connectors } = getDefaultWallets({
-  appName: "Lottery",
+  appName: "La Crypta - Lottery",
   chains,
 });
 
