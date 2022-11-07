@@ -14,7 +14,7 @@ const GlobalContainer = styled.div`
 
 const MainBlock = styled.main`
   min-height: 100vh;
-  padding: 3rem 0;
+  padding: 1.5rem 0;
   flex: 1;
   display: flex;
   flex-direction: column;
