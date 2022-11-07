@@ -6,6 +6,7 @@ import { PlayersContext } from "../../../contexts/Players";
 import { ConfigContext } from "../../../contexts/Config";
 import Countdown from "../../Countdown/Countdown";
 import Winner from "../../Winner";
+import Congratulations from "../../Congratulations";
 
 const delay = (time: number) => {
   return new Promise((resolve) => {
@@ -16,7 +17,7 @@ const delay = (time: number) => {
 const COUNTDOWN_NUMBERS = 2;
 
 const Play = () => {
-  const { blockHash } = useContext(BitcoinContext);
+  const { blockHash, blockNumber } = useContext(BitcoinContext);
   const { total, winners } = useContext(PlayersContext);
   const { lotteryDelay, staggeringDelay } = useContext(ConfigContext);
 
@@ -29,6 +30,8 @@ const Play = () => {
   const [winnerIndex, setWinnerIndex] = useState<number>(0);
 
   const [currentWinner, setCurrentWinner] = useState<number>();
+  const [congratulationsVisible, setCongratulationsVisible] =
+    useState<boolean>(false);
 
   let mounted = false;
 
@@ -49,6 +52,7 @@ const Play = () => {
 
   async function onFinishedLottery() {
     console.info("Finished lottery");
+    setCongratulationsVisible(true);
     setIsFinished(true);
   }
 
@@ -95,8 +99,10 @@ const Play = () => {
   return (
     <>
       <Logo />
-      <h1>Playing...</h1>
-      <h1>Block hash: {blockHash}</h1>
+      <Congratulations visible={congratulationsVisible} />
+      <h1>
+        Bitcoin Block ({blockNumber}): {blockHash}
+      </h1>
       <Countdown play={countdownStarted} limit={COUNTDOWN_NUMBERS} />
       <CardGrid onlyWinners={isFinished} winners={winnersShown} />
       {currentWinner ? (
