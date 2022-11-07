@@ -2,9 +2,12 @@ import { createContext, useContext, useEffect, useState } from "react";
 import { useContract, useProvider } from "wagmi";
 import { ConfigContext } from "./Config";
 
-import lotteryAbi from "../abi/ILottery.json";
+import deployedLottery from "@lacrypta/lottery/deployments/matic/Lottery.json";
+import { Lottery, ILottery } from "@lacrypta/lottery/typechain-types";
 import { BigNumber } from "ethers";
 import { BitcoinContext } from "./Bitcoin";
+
+const { abi: lotteryAbi, address: contractAddress } = deployedLottery;
 
 interface IPlayersContext {
   total: number;
@@ -21,28 +24,40 @@ interface IPlayersProviderProps {
   children: any;
 }
 
+function generateArray(total: number) {
+  const res = [];
+  for (let i = 1; i <= total; i++) {
+    res.push(String(i));
+  }
+  return res;
+}
+
 export const PlayersProvider = ({ children }: IPlayersProviderProps) => {
   const { totalPlayers, totalWinners } = useContext(ConfigContext);
   const [winners, setWinners] = useState<number[]>([]);
-  const { contractAddress } = useContext(ConfigContext);
   const { blockHash } = useContext(BitcoinContext);
 
   const provider = useProvider();
 
-  const contract = useContract({
+  const contract: Lottery = useContract({
     address: contractAddress,
     abi: lotteryAbi,
     signerOrProvider: provider,
-  });
+  }) as Lottery;
 
   const getWinners = async () => {
-    const _winners = await contract?.simulate([
-      "0x" + blockHash,
-      totalPlayers,
-      totalWinners,
-    ]);
+    const callData: ILottery.ConfigStruct = {
+      seed: "0x" + blockHash,
+      numberOfWinners: totalWinners as number,
+      players: generateArray(totalPlayers as number),
+    };
 
-    setWinners(_winners.map((n: BigNumber) => parseInt(n.toString())));
+    const _winners = await contract.simulate(callData);
+
+    console.info("Winners:");
+    console.dir(_winners);
+
+    setWinners(_winners.map((n: string) => parseInt(n)));
   };
 
   return (
