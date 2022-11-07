@@ -1,4 +1,5 @@
 import Counter from "./Counter";
+import Go from "./Go";
 
 interface ICountdownProps {
   play: boolean;
@@ -11,6 +12,7 @@ function generateCounters(limit: number, delay: number) {
   for (let i = limit; i >= 1; i--) {
     res.push(<Counter key={i} delay={delay * (limit - i)} value={i} />);
   }
+  res.push(<Go delay={delay * limit} key='go' />);
   return res;
 }
 
