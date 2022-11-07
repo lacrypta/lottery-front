@@ -3,9 +3,9 @@ import Head from "next/head";
 import { useContext } from "react";
 import styled from "styled-components";
 import Footer from "../components/Footer";
-import Finished from "../components/Steps/Finished/Finished";
 import Pending from "../components/Steps/Pending/Pending";
 import Play from "../components/Steps/Play/Play";
+import Ticket from "../components/Ticket";
 import { StepsContext } from "../contexts/Steps";
 
 const GlobalContainer = styled.div`
@@ -14,11 +14,10 @@ const GlobalContainer = styled.div`
 
 const MainBlock = styled.main`
   min-height: 100vh;
-  padding: 4rem 0;
+  padding: 3rem 0;
   flex: 1;
   display: flex;
   flex-direction: column;
-  justify-content: center;
   align-items: center;
 `;
 
@@ -36,9 +35,9 @@ const Home: NextPage = () => {
         ></link>
       </Head>
       <MainBlock>
+        <Ticket />
         {step === 0 ? <Pending /> : ""}
         {step === 1 ? <Play key='play' /> : ""}
-        {step === 2 ? <Finished /> : ""}
       </MainBlock>
 
       <Footer />
