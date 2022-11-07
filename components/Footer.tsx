@@ -25,7 +25,7 @@ const Footer = () => {
         target='_blank'
         rel='noopener noreferrer'
       >
-        Made with ❤️ by La Crypta 🌈
+        Made with ❤️ by La Crypta
       </a>
     </Container>
   );
