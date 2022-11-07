@@ -3,7 +3,10 @@ import styled from "styled-components";
 import { BitcoinContext } from "../contexts/Bitcoin";
 import { ConfigContext } from "../contexts/Config";
 
-const Container = styled.div``;
+const Container = styled.div`
+  margin-top: 1em;
+  font-size: 5vh;
+`;
 
 const WaitingBlock = () => {
   const { blockTarget } = useContext(ConfigContext);
