@@ -12,7 +12,7 @@ const delay = (time: number) => {
   });
 };
 
-const COUNTDOWN_NUMBERS = 10;
+const COUNTDOWN_NUMBERS = 2;
 
 const Play = () => {
   const { blockHash } = useContext(BitcoinContext);
@@ -41,7 +41,7 @@ const Play = () => {
     setCountdownStarted(true);
     setTimeout(() => {
       startLottery();
-    }, (COUNTDOWN_NUMBERS + 1) * 1000);
+    }, (COUNTDOWN_NUMBERS + 2) * 1000);
   }
 
   async function onFinishedLottery() {
