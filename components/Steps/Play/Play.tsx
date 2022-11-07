@@ -5,6 +5,7 @@ import { BitcoinContext } from "../../../contexts/Bitcoin";
 import { PlayersContext } from "../../../contexts/Players";
 import { ConfigContext } from "../../../contexts/Config";
 import Countdown from "../../Countdown/Countdown";
+import Winner from "../../Winner";
 
 const delay = (time: number) => {
   return new Promise((resolve) => {
@@ -26,6 +27,8 @@ const Play = () => {
   const [winnersShown, setWinnersShown] = useState<number[]>([]);
   const [showWinnerInterval, setShowWinnerInterval] = useState<NodeJS.Timer>();
   const [winnerIndex, setWinnerIndex] = useState<number>(0);
+
+  const [currentWinner, setCurrentWinner] = useState<number>();
 
   let mounted = false;
 
@@ -69,7 +72,12 @@ const Play = () => {
       onFinishedLottery();
       return;
     }
-    setWinnersShown((old) => [...old, winners[winnerIndex]]);
+    const winner = winners[winnerIndex];
+    if (!winner) {
+      return;
+    }
+    setWinnersShown((old) => [...old, winner]);
+    setCurrentWinner(winner);
   }, [showWinnerInterval, winners, winnerIndex]);
 
   // Start process when ready
@@ -91,6 +99,11 @@ const Play = () => {
       <h1>Block hash: {blockHash}</h1>
       <Countdown play={countdownStarted} limit={COUNTDOWN_NUMBERS} />
       <CardGrid onlyWinners={isFinished} winners={winnersShown} />
+      {currentWinner ? (
+        <Winner key={currentWinner} value={currentWinner} />
+      ) : (
+        ""
+      )}
     </>
   );
 };

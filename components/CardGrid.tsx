@@ -1,4 +1,4 @@
-import { useContext, useEffect } from "react";
+import { useContext, useEffect, useState } from "react";
 import styled from "styled-components";
 import { PlayersContext } from "../contexts/Players";
 import { Animated } from "react-animated-css";
