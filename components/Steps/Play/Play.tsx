@@ -7,6 +7,7 @@ import { ConfigContext } from "../../../contexts/Config";
 import Countdown from "../../Countdown/Countdown";
 import Winner from "../../Winner";
 import Congratulations from "../../Congratulations";
+import Ticket from "../../Ticket";
 
 const delay = (time: number) => {
   return new Promise((resolve) => {
@@ -98,7 +99,6 @@ const Play = () => {
 
   return (
     <>
-      <Logo />
       <Congratulations visible={congratulationsVisible} />
       <h1>
         Bitcoin Block ({blockNumber}): {blockHash}
