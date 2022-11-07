@@ -1,5 +1,6 @@
 import { createContext, useEffect, useState } from "react";
 import { db, doc, onSnapshot } from "../lib/firebase";
+import { Config } from "../types/config";
 
 interface IConfigContext {
   loaded: boolean;
@@ -10,6 +11,7 @@ interface IConfigContext {
   lotteryDelay?: number;
   staggeringDelay?: number;
   contractAddress?: string;
+  config?: Config;
 }
 
 export const ConfigContext = createContext<IConfigContext>({
@@ -23,40 +25,39 @@ interface IConfigProviderProps {
 const configRef = doc(db, "config", "main");
 
 export const ConfigProvider = ({ children }: IConfigProviderProps) => {
-  const [totalPlayers, setTotalPlayers] = useState<number>(0);
-  const [blockTarget, setBlockTarget] = useState<number>(0);
-  const [getBlockApiKey, setGetBlockApiKey] = useState<string>();
-  const [totalWinners, setTotalWinners] = useState<number>();
-  const [staggeringDelay, setStaggeringDelay] = useState<number>(60);
-  const [lotteryDelay, setLotteryDelay] = useState<number>();
-  const [contractAddress, setContractAddress] = useState<string>();
+  const [config, setConfig] = useState<Config>();
 
   const [loaded, setLoaded] = useState<boolean>(false);
 
   useEffect(() => {
     onSnapshot(configRef, {
       next: (snapshot) => {
-        const config = snapshot.data();
-        setBlockTarget(config?.blockTarget);
-        setTotalPlayers(config?.players);
-        setGetBlockApiKey(config?.getBlockApiKey);
-        setTotalWinners(config?.totalWinners);
-        setLotteryDelay(config?.lotteryDelay);
-        setStaggeringDelay(config?.staggeringDelay);
-        setContractAddress(config?.contractAddress);
-
+        const data = snapshot.data() as Config;
+        setConfig(data);
         setLoaded(true);
       },
     });
   }, []);
 
+  const {
+    totalPlayers,
+    blockTarget,
+    getBlockApiKey,
+    totalWinners,
+    lotteryDelay,
+    staggeringDelay,
+    contractAddress,
+  } = config || {};
+
   return (
     <ConfigContext.Provider
       value={{
+        config,
+        loaded,
+
         totalPlayers,
         blockTarget,
         getBlockApiKey,
-        loaded,
         totalWinners,
         lotteryDelay,
         staggeringDelay,
