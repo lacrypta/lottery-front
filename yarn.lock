@@ -1068,6 +1068,11 @@
     "@json-rpc-tools/types" "^1.7.6"
     "@pedrouid/environment" "^1.0.1"
 
+"@lacrypta/lottery@^0.0.0":
+  version "0.0.0"
+  resolved "https://registry.yarnpkg.com/@lacrypta/lottery/-/lottery-0.0.0.tgz#b24d13c8e08c38f8286014ead12393532bbe76e3"
+  integrity sha512-N57DRS88OcHguFwz5dHf/oGKpqdzHz00k3iQ1wU9xVefGFzejC0lU/fQMQM6TxFiZZWSLh7yueLg9FmWwM1moA==
+
 "@metamask/safe-event-emitter@2.0.0", "@metamask/safe-event-emitter@^2.0.0":
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/@metamask/safe-event-emitter/-/safe-event-emitter-2.0.0.tgz#af577b477c683fad17c619a78208cede06f9605c"

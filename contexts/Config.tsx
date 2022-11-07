@@ -10,7 +10,6 @@ interface IConfigContext {
   totalWinners?: number;
   lotteryDelay?: number;
   staggeringDelay?: number;
-  contractAddress?: string;
   config?: Config;
 }
 
