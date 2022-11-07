@@ -18,7 +18,7 @@ const rotate = keyframes`
 `;
 
 const Container = styled.div`
-  max-width: 800px;
+  max-width: 600px;
 
   img {
     width: 100%;
