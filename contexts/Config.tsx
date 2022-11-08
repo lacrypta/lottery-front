@@ -27,7 +27,6 @@ const configRef = doc(db, "config", "main");
 
 export const ConfigProvider = ({ children }: IConfigProviderProps) => {
   const [config, setConfig] = useState<Config>();
-
   const [loaded, setLoaded] = useState<boolean>(false);
 
   useEffect(() => {

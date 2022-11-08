@@ -8,14 +8,10 @@ import Countdown from "../../Countdown/Countdown";
 import Winner from "../../Winner";
 import Congratulations from "../../Congratulations";
 import Ticket from "../../Ticket";
-
-const delay = (time: number) => {
-  return new Promise((resolve) => {
-    setTimeout(resolve, time);
-  });
-};
+import NewBlock from "../../NewBlock";
 
 const COUNTDOWN_NUMBERS = 10;
+const FLASH_DURATION = 10000;
 
 const Play = () => {
   const { blockHash, blockNumber } = useContext(BitcoinContext);
@@ -25,6 +21,9 @@ const Play = () => {
   const [started, setStarted] = useState(false);
   const [isFinished, setIsFinished] = useState(false);
   const [countdownStarted, setCountdownStarted] = useState(false);
+
+  const [showGrid, setShowGrid] = useState(false);
+  const [showFlash, setShowFlash] = useState(false);
 
   const [winnersShown, setWinnersShown] = useState<number[]>([]);
   const [showWinnerInterval, setShowWinnerInterval] = useState<NodeJS.Timer>();
@@ -51,6 +50,20 @@ const Play = () => {
     }, (COUNTDOWN_NUMBERS + 2) * 1000);
   }
 
+  async function startFlash() {
+    // Start Flash
+    setShowFlash(true);
+    setTimeout(() => {
+      setShowFlash(false);
+
+      setShowGrid(true);
+      // Wait for Grid to be animated
+      setTimeout(() => {
+        startCountdown();
+      }, (staggeringDelay as number) * total + (lotteryDelay as number));
+    }, FLASH_DURATION);
+  }
+
   async function onFinishedLottery() {
     console.info("Finished lottery");
     setCongratulationsVisible(true);
@@ -62,9 +75,7 @@ const Play = () => {
       return;
     }
 
-    setTimeout(() => {
-      startCountdown();
-    }, staggeringDelay * total + lotteryDelay);
+    startFlash();
   }
 
   // New Winner interval
@@ -100,11 +111,18 @@ const Play = () => {
   return (
     <>
       <Congratulations visible={congratulationsVisible} />
+      {showFlash ? <NewBlock delay={FLASH_DURATION - 300} /> : ""}
+
       <h1>
         Bitcoin Block ({blockNumber}): {blockHash}
       </h1>
       <Countdown play={countdownStarted} limit={COUNTDOWN_NUMBERS} />
-      <CardGrid onlyWinners={isFinished} winners={winnersShown} />
+      {showGrid ? (
+        <CardGrid onlyWinners={isFinished} winners={winnersShown} />
+      ) : (
+        ""
+      )}
+
       {currentWinner ? (
         <Winner key={currentWinner} value={currentWinner} />
       ) : (

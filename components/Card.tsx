@@ -25,6 +25,7 @@ const Container = styled.div`
   border-radius: 10px;
   transition: all 0.5s ease;
   width: 76px;
+  text-align: center;
 
   &.winner {
     background: black;
@@ -51,7 +52,7 @@ const Card = ({ id, winner, die }: ICardProps) => {
   if (die) {
     classNames.push("die");
   }
-  return <Container className={classNames.join(" ")}>#{id}</Container>;
+  return <Container className={classNames.join(" ")}>{id}</Container>;
 };
 
 export default Card;
