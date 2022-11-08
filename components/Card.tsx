@@ -51,7 +51,7 @@ const Card = ({ id, winner, die }: ICardProps) => {
   if (die) {
     classNames.push("die");
   }
-  return <Container className={classNames.join(" ")}>#{id}</Container>;
+  return <Container className={classNames.join(" ")}>{id}</Container>;
 };
 
 export default Card;
