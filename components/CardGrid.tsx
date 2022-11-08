@@ -21,6 +21,8 @@ interface ICardGridProps {
 const CardGrid = ({ winners = [], onlyWinners = false }: ICardGridProps) => {
   const { staggeringDelay } = useContext(ConfigContext);
   const { total } = useContext(PlayersContext);
+
+  const [] = useState<boolean>(false);
   const cards = [];
 
   for (let id = 1; id < total + 1; id++) {
