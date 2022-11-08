@@ -1,6 +1,7 @@
 import { Contract, ethers } from "ethers";
 import LotteryJSON from "@lacrypta/lottery/deployments/matic/Lottery.json";
 import { CreateLotteryRequest } from "../types/request";
+import { formatUnits, parseUnits } from "ethers/lib/utils";
 
 // contract details
 const RPC_ADDRESS = process.env.NEXT_PUBLIC_RPC_ADDRESS || "";
@@ -17,10 +18,17 @@ const lotteryContract = new Contract(
 );
 
 export async function createLottery(lottery: CreateLotteryRequest) {
-  const gasPrice = await (await provider.getGasPrice()).mul("2");
+  const gasPrice = await (await provider.getGasPrice()).mul("1");
 
-  const tx = await lotteryContract.create(lottery.name, lottery.config, {
-    gasPrice,
-  });
+  const tx = await lotteryContract["create(string,bytes32,uint256,string[])"](
+    lottery.name,
+    lottery.config.seed,
+    lottery.config.numberOfWinners,
+    lottery.config.players,
+    {
+      gasPrice,
+    }
+  );
+
   return tx;
 }

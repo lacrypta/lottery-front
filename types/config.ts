@@ -5,4 +5,6 @@ export interface Config {
   totalWinners: number;
   staggeringDelay: number;
   lotteryDelay: number;
+  lotteryName: string;
+  txHash: string;
 }
