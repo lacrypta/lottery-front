@@ -25,7 +25,7 @@ const MainBlock = styled.main`
 
 const Home: NextPage = () => {
   const { step } = useContext(StepsContext);
-  const { blockTarget } = useContext(ConfigContext);
+  const { blockTarget, loaded } = useContext(ConfigContext);
   return (
     <GlobalContainer>
       <Head>
@@ -40,7 +40,11 @@ const Home: NextPage = () => {
       <MainBlock>
         <Ticket />
         {!blockTarget ? (
-          <Setup />
+          loaded ? (
+            <Setup />
+          ) : (
+            "Cargando configuración..."
+          )
         ) : (
           <>
             {step === 0 ? <Pending /> : ""}
