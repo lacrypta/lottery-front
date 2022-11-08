@@ -25,6 +25,7 @@ const Container = styled.div`
   border-radius: 10px;
   transition: all 0.5s ease;
   width: 76px;
+  text-align: center;
 
   &.winner {
     background: black;
