@@ -1,4 +1,6 @@
 import styled from "styled-components";
+import Confetti from "react-confetti";
+import useWindowSize from "react-use/lib/useWindowSize";
 
 const Container = styled.div`
   font-size: 12vh;
@@ -19,6 +21,12 @@ interface ICongratulationsProps {
 }
 
 const Congratulations = ({ visible }: ICongratulationsProps) => {
-  return <Container className={visible ? "show" : ""}>Ganadores:</Container>;
+  const { width, height } = useWindowSize();
+  return (
+    <>
+      {visible ? <Confetti width={width} height={height} /> : ""}
+      <Container className={visible ? "show" : ""}>Ganadores:</Container>
+    </>
+  );
 };
 export default Congratulations;
