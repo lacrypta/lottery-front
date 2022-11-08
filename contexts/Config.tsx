@@ -11,6 +11,8 @@ interface IConfigContext {
   lotteryDelay?: number;
   staggeringDelay?: number;
   config?: Config;
+  lotteryName?: string;
+  txHash?: string;
 }
 
 export const ConfigContext = createContext<IConfigContext>({
@@ -45,6 +47,8 @@ export const ConfigProvider = ({ children }: IConfigProviderProps) => {
     totalWinners,
     lotteryDelay,
     staggeringDelay,
+    lotteryName,
+    txHash,
   } = config || {};
 
   return (
@@ -59,6 +63,8 @@ export const ConfigProvider = ({ children }: IConfigProviderProps) => {
         totalWinners,
         lotteryDelay,
         staggeringDelay,
+        lotteryName,
+        txHash,
       }}
     >
       {children}
