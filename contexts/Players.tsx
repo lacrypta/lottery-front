@@ -4,8 +4,9 @@ import { ConfigContext } from "./Config";
 
 import deployedLottery from "@lacrypta/lottery/deployments/matic/Lottery.json";
 import { Lottery, ILottery } from "@lacrypta/lottery/typechain-types";
-import { BigNumber } from "ethers";
 import { BitcoinContext } from "./Bitcoin";
+import { ajaxCall } from "../lib/request";
+import { CreateLotteryRequest } from "../types/request";
 
 const { abi: lotteryAbi, address: contractAddress } = deployedLottery;
 
@@ -33,7 +34,8 @@ function generateArray(total: number) {
 }
 
 export const PlayersProvider = ({ children }: IPlayersProviderProps) => {
-  const { totalPlayers, totalWinners } = useContext(ConfigContext);
+  const { totalPlayers, totalWinners, lotteryName, txHash } =
+    useContext(ConfigContext);
   const [winners, setWinners] = useState<number[]>([]);
   const { blockHash } = useContext(BitcoinContext);
 
@@ -46,18 +48,24 @@ export const PlayersProvider = ({ children }: IPlayersProviderProps) => {
   }) as Lottery;
 
   const getWinners = async () => {
-    const callData: ILottery.ConfigStruct = {
+    const lotteryConfig: ILottery.ConfigStruct = {
       seed: "0x" + blockHash,
       numberOfWinners: totalWinners as number,
       players: generateArray(totalPlayers as number),
     };
 
     const _winners = await contract["simulate((bytes32,uint256,string[]))"](
-      callData
+      lotteryConfig
     );
 
-    console.info("Winners:");
-    console.dir(_winners);
+    const requestData: CreateLotteryRequest = {
+      name: lotteryName as string,
+      config: lotteryConfig,
+    };
+
+    if (!txHash) {
+      await ajaxCall("publish", requestData);
+    }
 
     setWinners(_winners.map((n: string) => parseInt(n)));
   };
