@@ -17,18 +17,19 @@ const request = async (req: NextApiRequest, res: NextApiResponse<any>) => {
     res.status(405).json({ success: false, message: "Invalid schema" });
     return;
   }
-
-  console.info("Body:");
-  console.dir(body);
-
-  const tx = await createLottery(body);
-
-  res.status(200).json({
-    success: true,
-    data: {
-      hash: tx.hash,
-    },
-  });
+  try {
+    const tx = await createLottery(body);
+    res.status(200).json({
+      success: true,
+      data: {
+        hash: tx.hash,
+      },
+    });
+  } catch (e: any) {
+    console.dir(e.message);
+    res.status(405).json({ success: false, message: "Tx unprocessed" });
+    return;
+  }
 };
 
 export default request;
