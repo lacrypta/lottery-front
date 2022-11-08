@@ -9,11 +9,16 @@ const Container = styled.div`
 `;
 
 const WaitingBlock = () => {
-  const { blockTarget } = useContext(ConfigContext);
   const { blockNumber } = useContext(BitcoinContext);
+  const { blockTarget } = useContext(ConfigContext);
   return (
     <Container>
-      <div>Bloque actual: {blockNumber}</div>
+      {blockNumber === 0 ? (
+        "Cargando Bloques de Bitcoin..."
+      ) : (
+        <div>Bloque actual: {blockNumber}</div>
+      )}
+
       <p>Esperando bloque de Bitcoin #{blockTarget}...</p>
     </Container>
   );
