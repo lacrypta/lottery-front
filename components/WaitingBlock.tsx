@@ -6,7 +6,16 @@ import { ConfigContext } from "../contexts/Config";
 const Container = styled.div`
   margin-top: 1em;
   font-size: 5vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 `;
+
+const BlockNumber = styled.div`
+  margin-bottom: 1em;
+`;
+
+const BlockTargetDiv = styled.div``;
 
 const WaitingBlock = () => {
   const { blockNumber } = useContext(BitcoinContext);
@@ -16,10 +25,12 @@ const WaitingBlock = () => {
       {blockNumber === 0 ? (
         "Cargando Bloques de Bitcoin..."
       ) : (
-        <div>Bloque actual: {blockNumber}</div>
+        <BlockNumber>Bloque actual: {blockNumber}</BlockNumber>
       )}
 
-      <p>Esperando bloque de Bitcoin #{blockTarget}...</p>
+      <BlockTargetDiv>
+        Esperando bloque de Bitcoin #{blockTarget}...
+      </BlockTargetDiv>
     </Container>
   );
 };
