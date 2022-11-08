@@ -17,7 +17,8 @@ const winnerAnimation = keyframes`
 
 const Container = styled.div`
   margin: 0.3em;
-  padding: 1.5rem;
+  padding: 0.7rem;
+  font-size: 2rem;
   text-align: left;
   color: inherit;
   text-decoration: none;
