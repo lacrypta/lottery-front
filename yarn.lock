@@ -1131,10 +1131,10 @@
     "@json-rpc-tools/types" "^1.7.6"
     "@pedrouid/environment" "^1.0.1"
 
-"@lacrypta/lottery@^0.0.6":
-  version "0.0.6"
-  resolved "https://registry.yarnpkg.com/@lacrypta/lottery/-/lottery-0.0.6.tgz#b20b98bda45a01fdc63bcb7aa498c11f7247f21e"
-  integrity sha512-LilNAX5sabDdmUzjb0TPdGrp552zzKkkwStnV0aPVYRK5Ob8zrwYTSrJLilQKrzQZzXTWqqd3ghzelZUwHLjXw==
+"@lacrypta/lottery@^0.0.7":
+  version "0.0.7"
+  resolved "https://registry.yarnpkg.com/@lacrypta/lottery/-/lottery-0.0.7.tgz#607e3a79f69934a6d5afb4a5f296896a37b81464"
+  integrity sha512-K4IGMPjoNlXQyislahSLpF4xTR8isIueVx6/ITdZ/mcWwnMZzg4tk46YONFBp4HNLaGnYvgsxWXIHjXl/Bm1VA==
 
 "@metamask/safe-event-emitter@2.0.0", "@metamask/safe-event-emitter@^2.0.0":
   version "2.0.0"
