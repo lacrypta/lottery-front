@@ -52,7 +52,9 @@ export const PlayersProvider = ({ children }: IPlayersProviderProps) => {
       players: generateArray(totalPlayers as number),
     };
 
-    const _winners = await contract.simulate(callData);
+    const _winners = await contract["simulate((bytes32,uint256,string[]))"](
+      callData
+    );
 
     console.info("Winners:");
     console.dir(_winners);
