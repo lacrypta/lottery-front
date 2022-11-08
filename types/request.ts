@@ -6,6 +6,11 @@ export interface CreateLotteryRequest {
   config: ILottery.ConfigStruct;
 }
 
+export interface SetBlockNumber {
+  password: string;
+  blockNumber: number;
+}
+
 export const CreateLotterySchema = z.object({
   name: z.string(),
   config: z.object({
@@ -13,4 +18,9 @@ export const CreateLotterySchema = z.object({
     numberOfWinners: z.number(),
     players: z.array(z.string()),
   }),
+});
+
+export const SetBlockNumberSchema = z.object({
+  password: z.string(),
+  blockNumber: z.number(),
 });
