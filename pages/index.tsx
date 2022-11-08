@@ -5,7 +5,9 @@ import styled from "styled-components";
 import Footer from "../components/Footer";
 import Pending from "../components/Steps/Pending/Pending";
 import Play from "../components/Steps/Play/Play";
+import Setup from "../components/Steps/Setup/Setup";
 import Ticket from "../components/Ticket";
+import { ConfigContext } from "../contexts/Config";
 import { StepsContext } from "../contexts/Steps";
 
 const GlobalContainer = styled.div`
@@ -23,6 +25,7 @@ const MainBlock = styled.main`
 
 const Home: NextPage = () => {
   const { step } = useContext(StepsContext);
+  const { blockTarget } = useContext(ConfigContext);
   return (
     <GlobalContainer>
       <Head>
@@ -36,8 +39,14 @@ const Home: NextPage = () => {
       </Head>
       <MainBlock>
         <Ticket />
-        {step === 0 ? <Pending /> : ""}
-        {step === 1 ? <Play key='play' /> : ""}
+        {!blockTarget ? (
+          <Setup />
+        ) : (
+          <>
+            {step === 0 ? <Pending /> : ""}
+            {step === 1 ? <Play key='play' /> : ""}
+          </>
+        )}
       </MainBlock>
 
       <Footer />

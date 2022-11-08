@@ -1,6 +1,12 @@
 import { ILottery } from "@lacrypta/lottery/typechain-types";
 import z from "zod";
 
+export type ResponseDataType = {
+  success: boolean;
+  message?: string;
+  data?: any;
+};
+
 export interface CreateLotteryRequest {
   name: string;
   config: ILottery.ConfigStruct;
