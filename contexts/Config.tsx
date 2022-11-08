@@ -45,7 +45,6 @@ export const ConfigProvider = ({ children }: IConfigProviderProps) => {
     totalWinners,
     lotteryDelay,
     staggeringDelay,
-    contractAddress,
   } = config || {};
 
   return (
@@ -60,7 +59,6 @@ export const ConfigProvider = ({ children }: IConfigProviderProps) => {
         totalWinners,
         lotteryDelay,
         staggeringDelay,
-        contractAddress,
       }}
     >
       {children}
