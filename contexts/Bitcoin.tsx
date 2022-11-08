@@ -1,4 +1,3 @@
-import { connectorsForWallets } from "@rainbow-me/rainbowkit";
 import { createContext, useContext, useEffect, useState } from "react";
 import { getBlockCount, getBlockHash } from "../lib/getblock";
 import { ConfigContext } from "./Config";
@@ -6,6 +5,7 @@ import { ConfigContext } from "./Config";
 interface IBitcoinContext {
   blockNumber: number;
   blockHash?: string;
+  getCurrentBlock?: () => Promise<number>;
 }
 
 export const BitcoinContext = createContext<IBitcoinContext>({
@@ -23,6 +23,10 @@ export const BitcoinProvider = ({ children }: IBitcoinProviderProps) => {
   const [listening, setListening] = useState<boolean>(false);
   const [finished, setFinished] = useState<boolean>(false);
 
+  const getCurrentBlock = async (): Promise<number> => {
+    return getBlockCount(getBlockApiKey as string);
+  };
+
   useEffect(() => {
     if (listening || !blockTarget || !getBlockApiKey) {
       return;
@@ -37,10 +41,7 @@ export const BitcoinProvider = ({ children }: IBitcoinProviderProps) => {
       if (!getBlockApiKey || finished) {
         return;
       }
-      const currentBlock = Math.min(
-        await getBlockCount(getBlockApiKey),
-        blockTarget || 0
-      );
+      const currentBlock = Math.min(await getCurrentBlock(), blockTarget || 0);
       if (blockTarget && currentBlock >= blockTarget) {
         setBlockHash(await getBlockHash(blockTarget, getBlockApiKey));
         setFinished(true);
@@ -53,7 +54,9 @@ export const BitcoinProvider = ({ children }: IBitcoinProviderProps) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [blockTarget, getBlockApiKey, listening, finished]);
   return (
-    <BitcoinContext.Provider value={{ blockNumber, blockHash }}>
+    <BitcoinContext.Provider
+      value={{ blockNumber, blockHash, getCurrentBlock }}
+    >
       {children}
     </BitcoinContext.Provider>
   );
