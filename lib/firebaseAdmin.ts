@@ -49,7 +49,7 @@ export const getConfig = async () => {
 };
 
 /**
- * Set block number
+ * Set block target
  * @param {number} blockNumber
  * @returns
  */
@@ -58,6 +58,15 @@ export const setBlockTarget = async (blockNumber: number) => {
     .collection("config")
     .doc("main")
     .update({ blockTarget: blockNumber });
+};
+
+/**
+ * Set transaction hash
+ * @param {string} txHash
+ * @returns
+ */
+export const setTxHash = async (txHash: string) => {
+  return db.collection("config").doc("main").update({ txHash });
 };
 
 exports.log = log;
