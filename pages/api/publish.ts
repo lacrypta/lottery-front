@@ -1,5 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from "next";
-import { createLottery, simulateLottery } from "../../lib/blockchain";
+import { createLottery, exists, simulateLottery } from "../../lib/blockchain";
 import { setTxHash } from "../../lib/firebaseAdmin";
 import { sendEmail } from "../../lib/mail";
 import { MailParams } from "../../types/mail";
@@ -21,6 +21,10 @@ const request = async (req: NextApiRequest, res: NextApiResponse<any>) => {
     return;
   }
   try {
+    if (await exists(body.name)) {
+      throw new Error("Lottery Already exists");
+    }
+
     console.info("Simulate Lottery...");
     const winners: string[] = Object.values(await simulateLottery(body));
 

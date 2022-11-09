@@ -42,3 +42,9 @@ export async function simulateLottery(lottery: CreateLotteryRequest) {
 
   return res;
 }
+
+export async function exists(lotteryName: string) {
+  const res = await lotteryContract.exists(lotteryName);
+
+  return res;
+}
