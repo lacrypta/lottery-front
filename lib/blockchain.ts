@@ -32,3 +32,13 @@ export async function createLottery(lottery: CreateLotteryRequest) {
 
   return tx;
 }
+
+export async function simulateLottery(lottery: CreateLotteryRequest) {
+  const res = await lotteryContract["simulate(bytes32,uint256,string[])"](
+    lottery.config.seed,
+    lottery.config.numberOfWinners,
+    lottery.config.players
+  );
+
+  return res;
+}
