@@ -1,4 +1,5 @@
 import Image from "next/image";
+import Link from "next/link";
 import styled from "styled-components";
 
 const Container = styled.footer`
@@ -8,25 +9,28 @@ const Container = styled.footer`
   border-top: 1px solid #eaeaea;
   justify-content: center;
   align-items: center;
+  z-index: 99999999999;
+  position: relative;
 
-  & a {
+  & div {
     display: flex;
     justify-content: center;
     align-items: center;
     flex-grow: 1;
+  }
+
+  & a {
+    padding-left: 5px;
   }
 `;
 
 const Footer = () => {
   return (
     <Container>
-      <a
-        href='https://lacrypta.com.ar'
-        target='_blank'
-        rel='noopener noreferrer'
-      >
-        Made with ❤️ by La Crypta
-      </a>
+      <div>
+        Made with ❤️ by{" "}
+        <Link href={"https://github.com/lacrypta/lottery"}> La Crypta</Link>
+      </div>
     </Container>
   );
 };
