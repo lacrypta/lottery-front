@@ -1,5 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from "next";
-import { createLottery } from "../../lib/blockchain";
+import { createLottery, simulateLottery } from "../../lib/blockchain";
 import { setTxHash } from "../../lib/firebaseAdmin";
 import { CreateLotterySchema } from "../../types/request";
 
@@ -19,6 +19,9 @@ const request = async (req: NextApiRequest, res: NextApiResponse<any>) => {
     return;
   }
   try {
+    console.info("Simulate Lottery...");
+    const winners = await simulateLottery(body);
+
     console.info("Creating Lottery...");
     const tx = await createLottery(body);
 
