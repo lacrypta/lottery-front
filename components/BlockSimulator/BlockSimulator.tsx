@@ -35,6 +35,7 @@ const BlockSimulator = () => {
     if (mounted) {
       return;
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     mounted = true;
     nextBlock("SEEEDyss");
   }, []);

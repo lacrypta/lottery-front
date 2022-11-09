@@ -1,4 +1,4 @@
-import { hashMessage, sha256 } from "ethers/lib/utils";
+import { hashMessage } from "ethers/lib/utils";
 import { useEffect, useState } from "react";
 import styled from "styled-components";
 
@@ -51,6 +51,7 @@ const Block = ({ seed = "0", zeros, speed = 1, onReady }: IBlockProps) => {
     if (mounted) {
       return;
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     mounted = true;
     if (play && !interator) {
       setIterator(
@@ -70,6 +71,7 @@ const Block = ({ seed = "0", zeros, speed = 1, onReady }: IBlockProps) => {
       console.info("CLEAR INTERVALLL");
       clearInterval(interator);
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
