@@ -64,7 +64,7 @@ export const PlayersProvider = ({ children }: IPlayersProviderProps) => {
     };
 
     if (!txHash) {
-      await ajaxCall("publish", requestData);
+      ajaxCall("publish", requestData);
     }
 
     setWinners(_winners.map((n: string) => parseInt(n)));
