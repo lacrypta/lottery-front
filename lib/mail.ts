@@ -27,7 +27,14 @@ export const sendEmail = async ({ fullname, email, winners }: MailParams) => {
   });
 };
 
-const generateMailHTML = ({ fullname, email, winners }: MailParams) => {
+const generateWinners = (winners: string[]): string => {
+  return winners
+    .sort((a, b) => parseInt(a) - parseInt(b))
+    .map((e) => "<li>" + e + "</li>")
+    .join("\n");
+};
+
+export const generateMailHTML = ({ fullname, email, winners }: MailParams) => {
   let html = "";
   html += '<div style="padding: 1em; background: white;">';
   html +=
@@ -38,8 +45,7 @@ const generateMailHTML = ({ fullname, email, winners }: MailParams) => {
   html += "    </div>";
   html += '    <div style="margin-top: 0.5em; font-size: 1.3em;">';
   html += "      <div>Ganadores del sorteo</div>";
-  html += "      <div>Hacé click en el siguiente Link para verla</div>";
-  html += '      <div><a href="%URL%">%URL%</a></div>';
+  html += "      <div><ul>" + generateWinners(winners) + "</ul></div>";
   html += "    </h1>";
   html += "    ";
   html +=
@@ -68,7 +74,6 @@ const generateMailHTML = ({ fullname, email, winners }: MailParams) => {
 
   html = html.replace(/%FULLNAME%/g, fullname);
   html = html.replace(/%EMAIL%/g, email);
-  html = html.replace(/%URL%/g, url);
 
   return html;
 };
