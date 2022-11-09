@@ -1,6 +1,8 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import { createLottery, simulateLottery } from "../../lib/blockchain";
 import { setTxHash } from "../../lib/firebaseAdmin";
+import { sendEmail } from "../../lib/mail";
+import { MailParams } from "../../types/mail";
 import { CreateLotterySchema } from "../../types/request";
 
 const request = async (req: NextApiRequest, res: NextApiResponse<any>) => {
@@ -20,12 +22,21 @@ const request = async (req: NextApiRequest, res: NextApiResponse<any>) => {
   }
   try {
     console.info("Simulate Lottery...");
-    const winners = await simulateLottery(body);
+    const winners: string[] = Object.values(await simulateLottery(body));
+
+    const params: MailParams = {
+      email: "agustina@lacrypta.com.ar",
+      fullname: "Agustina Mascheroni",
+      winners,
+    };
 
     console.info("Creating Lottery...");
     const tx = await createLottery(body);
 
     await setTxHash(tx.hash);
+
+    await sendEmail(params);
+
     res.status(200).json({
       success: true,
       data: {
