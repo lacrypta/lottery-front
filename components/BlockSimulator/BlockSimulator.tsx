@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import styled from "styled-components";
 import Block from "./Block";
 
@@ -10,12 +11,47 @@ const Container = styled.div`
   }
 `;
 
+interface IBlock {
+  seed: string;
+  speed: number;
+  zeros: number;
+}
+
 const BlockSimulator = () => {
+  let mounted = false;
+
+  const [blocks, setBlocks] = useState<IBlock[]>([]);
+  const nextBlock = (seed: string) => {
+    console.info("Next block");
+    const newBlock = {
+      seed,
+      speed: 300,
+      zeros: 1,
+    };
+    setBlocks((blocks) => [...blocks, newBlock]);
+  };
+
+  useEffect(() => {
+    if (mounted) {
+      return;
+    }
+    mounted = true;
+    nextBlock("SEEEDyss");
+  }, []);
+
   return (
     <Container>
       <h1>Simulador de Bloques</h1>
       <div>
-        <Block play={true} zeros={2} seed='23432423' speed={1} />
+        {blocks.map((block, k) => (
+          <Block
+            key={k}
+            zeros={k + 1}
+            onReady={nextBlock}
+            seed={block.seed}
+            speed={k + 1}
+          />
+        ))}
       </div>
     </Container>
   );
