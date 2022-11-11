@@ -14,32 +14,46 @@ const Container = styled.div`
 `;
 
 interface ICardGridProps {
-  winners: number[];
+  winners: string[];
   onlyWinners: boolean;
 }
 
 const CardGrid = ({ winners = [], onlyWinners = false }: ICardGridProps) => {
   const { staggeringDelay } = useContext(ConfigContext);
-  const { total } = useContext(PlayersContext);
+  const { players, total } = useContext(PlayersContext);
 
   const [] = useState<boolean>(false);
-  const cards = [];
 
-  for (let id = 1; id < total + 1; id++) {
-    const isWinner = winners.includes(id);
-    cards.push(
+  const cards = players?.map((player, k) => {
+    const isWinner = winners.includes(player);
+    return (
       <Animated
-        key={id}
+        key={k}
         animationIn='zoomInRight'
         animationOut='zoomOut'
         animationInDuration={1300}
-        animationInDelay={id * (staggeringDelay || 60)}
+        animationInDelay={k * (staggeringDelay || 60)}
         isVisible={isWinner ? true : !onlyWinners}
       >
-        <Card id={id} die={!isWinner && onlyWinners} winner={isWinner} />
+        <Card id={player} die={!isWinner && onlyWinners} winner={isWinner} />
       </Animated>
     );
-  }
+  });
+  // for (let id = 1; id < total + 1; id++) {
+  //   const isWinner = winners.includes(id);
+  //   cards.push(
+  //     <Animated
+  //       key={id}
+  //       animationIn='zoomInRight'
+  //       animationOut='zoomOut'
+  //       animationInDuration={1300}
+  //       animationInDelay={id * (staggeringDelay || 60)}
+  //       isVisible={isWinner ? true : !onlyWinners}
+  //     >
+  //       <Card id={id} die={!isWinner && onlyWinners} winner={isWinner} />
+  //     </Animated>
+  //   );
+  // }
 
   return <Container>{cards}</Container>;
 };

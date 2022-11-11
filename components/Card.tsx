@@ -1,7 +1,7 @@
 import styled, { keyframes } from "styled-components";
 
 interface ICardProps {
-  id: number;
+  id: string;
   die: boolean;
   winner: boolean;
 }
@@ -16,8 +16,8 @@ const winnerAnimation = keyframes`
 `;
 
 const Container = styled.div`
-  margin: 0.3em;
-  padding: 0.7rem;
+  margin: 0.4em;
+  padding: 0.8rem;
   font-size: 2rem;
   text-align: left;
   color: inherit;
@@ -25,7 +25,6 @@ const Container = styled.div`
   border: 1px solid #eaeaea;
   border-radius: 10px;
   transition: all 0.5s ease;
-  width: 76px;
   text-align: center;
 
   &.winner {

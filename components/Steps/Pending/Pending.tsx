@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import BlockSimulator from "../../BlockSimulator/BlockSimulator";
 import WaitingBlock from "../../WaitingBlock";
 
