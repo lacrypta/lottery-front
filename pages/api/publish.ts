@@ -29,8 +29,8 @@ const request = async (req: NextApiRequest, res: NextApiResponse<any>) => {
     const winners: string[] = Object.values(await simulateLottery(body));
 
     const params: MailParams = {
-      email: "agustina@lacrypta.com.ar",
-      fullname: "Agustina Mascheroni",
+      email: "agustin@lacrypta.com.ar",
+      fullname: "Agustin Kassis",
       winners,
     };
 
