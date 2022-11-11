@@ -25,7 +25,7 @@ const Play = () => {
   const [showGrid, setShowGrid] = useState(false);
   const [showFlash, setShowFlash] = useState(false);
 
-  const [winnersShown, setWinnersShown] = useState<number[]>([]);
+  const [winnersShown, setWinnersShown] = useState<string[]>([]);
   const [showWinnerInterval, setShowWinnerInterval] = useState<NodeJS.Timer>();
   const [winnerIndex, setWinnerIndex] = useState<number>(0);
 
