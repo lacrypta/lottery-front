@@ -66,7 +66,10 @@ const Setup = () => {
           Block Target:{" "}
           <input
             type='text'
+            name='blockTarget'
+            id='blockTarget'
             value={blockNumber || ""}
+            autoComplete='off'
             onChange={(e) => setBlockNumber(parseInt(e.target.value))}
           />
         </DivLine>
@@ -74,7 +77,10 @@ const Setup = () => {
           Password:{" "}
           <input
             type='password'
+            name='password'
+            id='password'
             value={password}
+            autoComplete='off'
             onChange={(e) => setPassword(e.target.value)}
           />
         </DivLine>
