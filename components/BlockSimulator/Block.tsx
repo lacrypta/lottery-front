@@ -29,7 +29,7 @@ interface IBlockProps {
 const DELAY = 200;
 
 const Block = ({ seed = "0", zeros, speed = 1, onReady }: IBlockProps) => {
-  const [interator, setIterator] = useState<NodeJS.Timer>();
+  const [iterator, setIterator] = useState<NodeJS.Timer>();
   const [hash, setHash] = useState<string>();
   const [nonce, setNonce] = useState<number>(0);
   const [play, setPlay] = useState<boolean>(true);
@@ -53,23 +53,23 @@ const Block = ({ seed = "0", zeros, speed = 1, onReady }: IBlockProps) => {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
     mounted = true;
-    if (play && !interator) {
+    if (play && !iterator) {
       setIterator(
         setInterval(
           runIteration.bind(this, setNonce.bind(setNonce)),
           DELAY / speed
         )
       );
-    } else if (!play && interator) {
-      clearInterval(interator);
+    } else if (!play && iterator) {
+      clearInterval(iterator);
     } else {
     }
-  }, [play, interator, nonce]);
+  }, [play, iterator, nonce]);
 
   useEffect(() => {
     return () => {
       console.info("CLEAR INTERVALLL");
-      clearInterval(interator);
+      clearInterval(iterator);
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);

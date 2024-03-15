@@ -1,7 +1,6 @@
 import { useContext, useEffect, useState } from "react";
 import styled from "styled-components";
 import { BitcoinContext } from "../../../contexts/Bitcoin";
-import { getBlockCount } from "../../../lib/getblock";
 import { ajaxCall } from "../../../lib/request";
 
 const Container = styled.div`
@@ -37,28 +36,22 @@ const Button = styled.button`
 `;
 
 const Setup = () => {
-  const { getCurrentBlock } = useContext(BitcoinContext);
+  const { blockNumber } = useContext(BitcoinContext);
 
   const [password, setPassword] = useState<string>("");
-  const [blockNumber, setBlockNumber] = useState<number>();
+  const [blockTarget, setBlockTarget] = useState<number>();
 
   const handleSubmit = async (e: any) => {
     e.preventDefault();
     ajaxCall("setblock", {
       password,
-      blockNumber,
+      blockNumber: blockTarget,
     });
   };
 
   useEffect(() => {
-    if (!getCurrentBlock) {
-      return;
-    }
-    getCurrentBlock().then((currentBlock) => {
-      setBlockNumber(currentBlock);
-    });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+    setBlockTarget(blockNumber);
+  }, [blockNumber]);
   return (
     <Container>
       <form onSubmit={handleSubmit}>
@@ -70,7 +63,7 @@ const Setup = () => {
             id='blockTarget'
             value={blockNumber || ""}
             autoComplete='off'
-            onChange={(e) => setBlockNumber(parseInt(e.target.value))}
+            onChange={(e) => setBlockTarget(parseInt(e.target.value))}
           />
         </DivLine>
         <DivLine>
