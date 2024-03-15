@@ -9,6 +9,7 @@ const useNomad = <T>(
   options?: UseNomadOptions
 ): UseNomadReturn & T => {
   const funcReturn: T = {} as T;
+
   return {
     on: (event: Event) => {},
     ...funcReturn,

@@ -1,7 +1,7 @@
 import { Relay } from "nostr-tools";
 import { NomadHandle, NomadRepoManifest } from "./types/nomad";
 
-class Nomad {
+export class Nomad {
   name: string;
   constructor(eventId: string) {
     this.name = "Nomad";
@@ -63,5 +63,7 @@ async function getRepoManifest(
   repoName: string,
   relay: Relay
 ): Promise<NomadRepoManifest> {
+
+  relay.
   return data;
 }
