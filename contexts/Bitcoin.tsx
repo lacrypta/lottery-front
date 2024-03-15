@@ -22,8 +22,15 @@ export const BitcoinProvider = ({ children }: IBitcoinProviderProps) => {
   const [currentBlockHeight, setCurrentBlockHeight] = useState<number>(0);
   const [currentBlockHash, setCurrentBlockHash] = useState<string>("");
 
+  const { md5 } = useNomad("fierillo@lacrypta.ar/sha2", { params: "asda" });
+
+  md5;
+
+  md5("asdada");
+
   useEffect(() => {
     if (blockTarget && blockHeight && blockHash) {
+      // If the blockHeight is greater than the blockTarget, we need to fetch the blockHash
       if (blockHeight > blockTarget) {
         getBlockHash(blockTarget).then((hash) => {
           setCurrentBlockHash(hash);
