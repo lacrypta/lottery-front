@@ -12,11 +12,4 @@ export interface NomadRepoManifest {
   description: string;
   versions: { [key: string]: string };
   event: Event;
-  currentCodeEvent?: NomadCodeEvent;
-}
-
-export interface NomadCodeEvent {
-  code: string;
-  event: Event;
-  repoManifest?: NomadRepoManifest;
 }
