@@ -27,7 +27,9 @@ const useBlockcypher = (): UseMempoolReturn => {
   );
 
   const getChainEndpoint = useCallback(async () => {
-    const res = await fetch(`https://api.blockcypher.com/v1/btc/main`);
+    const res = await fetch(
+      `https://api.blockcypher.com/v1/btc/main?token=${TOKEN}`
+    );
     const data = await res.json();
 
     setBlockHeight(data.height);
