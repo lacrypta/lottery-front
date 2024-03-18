@@ -1,17 +1,33 @@
+import { useEffect, useState } from "react";
+import { Nomad } from "../lib/nomad/Nomad";
+import { relayInit } from "nostr-tools";
+
 interface UseNomadReturn {
-  on: (event: Event) => void;
+  nomad?: Nomad;
 }
 
 interface UseNomadOptions {}
 
-const useNomad = <T>(
+export const useNomad = <T>(
   idOrHandle: string,
   options?: UseNomadOptions
 ): UseNomadReturn & T => {
-  const funcReturn: T = {} as T;
+  const [nomad, setNomad] = useState<Nomad>();
+
+  const loadNomad = async (idOrHandle: string) => {
+    const relay = relayInit("wss://nos.lol/");
+    await relay.connect();
+    const nomad = await Nomad.fromHandleOrEventId(idOrHandle, relay);
+    nomad.init();
+    setNomad(nomad);
+  };
+
+  useEffect(() => {
+    loadNomad(idOrHandle);
+  }, [idOrHandle]);
 
   return {
-    on: (event: Event) => {},
-    ...funcReturn,
+    nomad,
+    ...(nomad?.nomadRuntime?.getRuntimeInterface<T>() as T),
   };
 };
