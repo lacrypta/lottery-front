@@ -9,6 +9,7 @@ import Setup from "../components/Steps/Setup/Setup";
 import Ticket from "../components/Ticket";
 import { ConfigContext } from "../contexts/Config";
 import { StepsContext } from "../contexts/Steps";
+import { NomadTest } from "../components/NomadTest";
 
 const GlobalContainer = styled.div`
   padding: 0 2rem;
@@ -37,7 +38,7 @@ const Home: NextPage = () => {
           href='https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.5.2/animate.min.css'
         ></link>
       </Head>
-      <MainBlock>
+      {/* <MainBlock>
         <Ticket />
         {!blockTarget ? (
           loaded ? (
@@ -51,7 +52,9 @@ const Home: NextPage = () => {
             {step === 1 ? <Play key='play' /> : ""}
           </>
         )}
-      </MainBlock>
+      </MainBlock> */}
+
+      <NomadTest />
 
       <Footer />
     </GlobalContainer>
