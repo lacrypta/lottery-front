@@ -1,6 +1,5 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import { ConfigContext } from "./Config";
-import useMempool from "../hooks/useMempool";
 import useBlockcypher from "../hooks/useBlockcypher";
 
 interface IBitcoinContext {
@@ -22,12 +21,6 @@ export const BitcoinProvider = ({ children }: IBitcoinProviderProps) => {
   const [currentBlockHeight, setCurrentBlockHeight] = useState<number>(0);
   const [currentBlockHash, setCurrentBlockHash] = useState<string>("");
 
-  const { md5 } = useNomad("fierillo@lacrypta.ar/sha2", { params: "asda" });
-
-  md5;
-
-  md5("asdada");
-
   useEffect(() => {
     if (blockTarget && blockHeight && blockHash) {
       // If the blockHeight is greater than the blockTarget, we need to fetch the blockHash
@@ -43,11 +36,12 @@ export const BitcoinProvider = ({ children }: IBitcoinProviderProps) => {
 
       close();
     }
-  }, [blockTarget, blockHeight, close]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [blockTarget, blockHeight, blockHash, close]);
 
   return (
     <BitcoinContext.Provider
-      value={{ blockNumber: currentBlockHeight, currentBlockHash }}
+      value={{ blockNumber: currentBlockHeight, blockHash: currentBlockHash }}
     >
       {children}
     </BitcoinContext.Provider>
