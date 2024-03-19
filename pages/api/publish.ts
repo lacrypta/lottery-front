@@ -1,9 +1,23 @@
 import type { NextApiRequest, NextApiResponse } from "next";
-import { createLottery, exists, simulateLottery } from "../../lib/blockchain";
 import { setTxHash } from "../../lib/firebaseAdmin";
 import { sendEmail } from "../../lib/mail";
 import { MailParams } from "../../types/mail";
 import { CreateLotterySchema } from "../../types/request";
+
+// Mocks functions
+const exists = (str: string) => {
+  return true;
+};
+
+const simulateLottery = (_any: any) => {
+  return true;
+};
+
+const createLottery = (_any: any) => {
+  return {
+    hash: "string",
+  };
+};
 
 const request = async (req: NextApiRequest, res: NextApiResponse<any>) => {
   if (req.method !== "POST") {

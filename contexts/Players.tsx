@@ -1,16 +1,15 @@
 import { createContext, useContext, useEffect, useState } from "react";
-import { useContract, useProvider } from "wagmi";
 import { ConfigContext } from "./Config";
 
-import deployedLottery from "@lacrypta/lottery/deployments/matic/Lottery.json";
-import { Lottery, ILottery } from "@lacrypta/lottery/typechain-types";
 import { BitcoinContext } from "./Bitcoin";
-import { ajaxCall } from "../lib/request";
 import { CreateLotteryRequest } from "../types/request";
 import { collection, getDocs, query } from "firebase/firestore";
 import { db } from "../lib/firebase";
+import { useNomad } from "../hooks/useNomad";
 
-const { abi: lotteryAbi, address: contractAddress } = deployedLottery;
+type ILotteryABI = {
+  lottery?: (seed: string, winners: number, players: string[]) => string[];
+};
 
 interface IPlayersContext {
   total: number;
@@ -28,14 +27,6 @@ interface IPlayersProviderProps {
   children: any;
 }
 
-function generateArray(total: number) {
-  const res = [];
-  for (let i = 1; i <= total; i++) {
-    res.push(String(i));
-  }
-  return res;
-}
-
 async function generatePlayers(): Promise<string[]> {
   const playersRef = collection(db, "players");
   const q = query(playersRef);
@@ -51,23 +42,26 @@ export const PlayersProvider = ({ children }: IPlayersProviderProps) => {
   const { blockHash } = useContext(BitcoinContext);
   const [players, setPlayers] = useState<string[]>([]);
 
-  const provider = useProvider();
-
-  const contract: Lottery = useContract({
-    address: contractAddress,
-    abi: lotteryAbi,
-    signerOrProvider: provider,
-  }) as Lottery;
+  const { lottery } = useNomad<ILotteryABI>(
+    "1054c92c697c85e1947119fea1445668aa1a7ea9f13dd87c36613b694b52d8e9"
+  );
 
   const getWinners = async () => {
-    const lotteryConfig: ILottery.ConfigStruct = {
-      seed: "0x" + blockHash,
-      numberOfWinners: totalWinners as number,
+    if (!lottery) {
+      alert("Lottery nomad not ready yet");
+      return;
+    }
+
+    const lotteryConfig = {
+      seed: blockHash!,
+      numberOfWinners: totalWinners!,
       players,
     };
 
-    const _winners = await contract["simulate((bytes32,uint256,string[]))"](
-      lotteryConfig
+    const _winners = await lottery(
+      lotteryConfig.seed,
+      lotteryConfig.numberOfWinners,
+      lotteryConfig.players
     );
 
     console.info("Winners:");
@@ -86,7 +80,6 @@ export const PlayersProvider = ({ children }: IPlayersProviderProps) => {
   };
 
   useEffect(() => {
-    // setPlayers(generateArray(totalPlayers as number));
     generatePlayers().then((_players) => {
       setPlayers(_players);
     });
@@ -101,7 +94,7 @@ export const PlayersProvider = ({ children }: IPlayersProviderProps) => {
         getWinners,
       }}
     >
-      {children}
+      {!lottery ? <div>Lottery nomad not ready</div> : children}
     </PlayersContext.Provider>
   );
 };

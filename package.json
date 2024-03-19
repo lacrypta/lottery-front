@@ -9,9 +9,6 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@lacrypta/lottery": "^0.0.7",
-    "@rainbow-me/rainbowkit": "^0.7.4",
-    "ethers": "^5.0.0",
     "firebase": "^9.13.0",
     "firebase-admin": "^11.2.0",
     "next": "^12.1.6",
@@ -22,14 +19,15 @@
     "react-confetti": "^6.1.0",
     "react-dom": "^18.1.0",
     "react-use": "^17.4.0",
+    "sha256": "^0.2.0",
     "styled-components": "^5.3.6",
-    "wagmi": "^0.7.5",
     "zod": "^3.19.1"
   },
   "devDependencies": {
     "@types/node": "^17.0.35",
     "@types/nodemailer": "^6.4.6",
     "@types/react": "^18.0.9",
+    "@types/sha256": "^0.2.2",
     "@types/styled-components": "^5.1.26",
     "eslint": "^8.15.0",
     "eslint-config-next": "^12.1.6",

@@ -1,4 +1,4 @@
-import { hashMessage } from "ethers/lib/utils";
+import sha256 from "sha256";
 import { useEffect, useState } from "react";
 import styled from "styled-components";
 
@@ -39,7 +39,7 @@ const Block = ({ seed = "0", zeros, speed = 1, onReady }: IBlockProps) => {
   let _nonce = nonce;
   const runIteration = (setNonce: any) => {
     setNonce(_nonce++);
-    const _hash = hashMessage(seed + _nonce).substr(2);
+    const _hash = sha256(seed + _nonce);
     setHash(_hash);
     if (isHashValid(_hash, zeros)) {
       setPlay(false);

@@ -15,14 +15,19 @@ export class Nomad {
   // Not yet implemented
   dependencies: { [name: string]: Nomad } = {};
 
-  public eventEmitter: EventEmitter = new EventEmitter();
+  public eventEmitter;
   public eventId: string;
 
-  constructor(codeEvent: Event, repoManifest?: NomadRepoManifest) {
+  constructor(
+    codeEvent: Event,
+    repoManifest?: NomadRepoManifest,
+    eventEmitter?: EventEmitter
+  ) {
     this.codeEvent = codeEvent;
     this.authorPubkey = codeEvent.pubkey;
     this.repoManifest = repoManifest;
     this.eventId = codeEvent.id;
+    this.eventEmitter = eventEmitter || new EventEmitter();
   }
 
   async init<T>(...args: any[]): Promise<T> {
@@ -57,7 +62,11 @@ export class Nomad {
     return await this.nomadRuntime.call(name, ...args);
   }
 
-  static async fromHandle(handleString: string, relay: Relay) {
+  static async fromHandle(
+    handleString: string,
+    relay: Relay,
+    eventEmitter?: EventEmitter
+  ) {
     const handle = parseHandle(handleString);
     const authorPubkey = await getHandlePubkey(handle!);
     const repoManifest = await getRepoManifest(
@@ -79,16 +88,24 @@ export class Nomad {
     return new Nomad(codeEvent, repoManifest);
   }
 
-  static async fromEventId(eventId: string, relay: Relay) {
+  static async fromEventId(
+    eventId: string,
+    relay: Relay,
+    eventEmitter?: EventEmitter
+  ) {
     const codeEvent = await getCodeEvent(eventId, relay);
     return new Nomad(codeEvent);
   }
 
-  static async fromHandleOrEventId(handleOrEventId: string, relay: Relay) {
+  static async fromHandleOrEventId(
+    handleOrEventId: string,
+    relay: Relay,
+    eventEmitter?: EventEmitter
+  ) {
     if (handleOrEventId.includes("@")) {
-      return this.fromHandle(handleOrEventId, relay);
+      return this.fromHandle(handleOrEventId, relay, eventEmitter);
     } else {
-      return this.fromEventId(handleOrEventId, relay);
+      return this.fromEventId(handleOrEventId, relay, eventEmitter);
     }
   }
 }

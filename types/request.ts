@@ -1,5 +1,10 @@
-import { ILottery } from "@lacrypta/lottery/typechain-types";
 import z from "zod";
+
+export interface ILottery {
+  seed: string;
+  numberOfWinners: number;
+  players: string[];
+}
 
 export type ResponseDataType = {
   success: boolean;
@@ -9,7 +14,7 @@ export type ResponseDataType = {
 
 export interface CreateLotteryRequest {
   name: string;
-  config: ILottery.ConfigStruct;
+  config: ILottery;
 }
 
 export interface SetBlockNumber {
