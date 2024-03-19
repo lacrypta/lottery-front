@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
 
-const TOKEN = "00dda93f1554469e987c0a5cd1eeea36";
+const TOKEN = process.env.NEXT_PUBLIC_BLOCKCYPHER_APIKEY;
 
 interface UseMempoolReturn {
   blockHeight?: number;
