@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useNomad } from "../hooks/useNomad";
 
 type ILotteryABI = {
@@ -6,8 +6,13 @@ type ILotteryABI = {
 };
 
 export const NomadTest = () => {
-  const { lottery } = useNomad<ILotteryABI>(
-    "1054c92c697c85e1947119fea1445668aa1a7ea9f13dd87c36613b694b52d8e9"
+  const [winners, setWinners] = useState<string[]>([]);
+  // const { lottery } = useNomad<ILotteryABI>(
+  //   "1054c92c697c85e1947119fea1445668aa1a7ea9f13dd87c36613b694b52d8e9"
+  // );
+
+  const { lottery, status, isLoading, error } = useNomad<ILotteryABI>(
+    "timba@hodl.ar/lottery"
   );
 
   useEffect(() => {
@@ -39,11 +44,23 @@ export const NomadTest = () => {
       "Walter",
     ];
 
-    const winners = lottery(seed, winnersCount, players);
-
-    console.info("winners:");
-    console.dir(winners);
+    const _winners = lottery(seed, winnersCount, players);
+    setWinners(_winners);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [lottery]);
 
-  return <div>hola</div>;
+  return (
+    <div>
+      <div>Status: {status}</div>
+      <div>
+        {isLoading ? (
+          <div>Cargando Nomad...</div>
+        ) : error ? (
+          <div>Error: {error}</div>
+        ) : (
+          <div>Winners: {JSON.stringify(winners)}</div>
+        )}
+      </div>
+    </div>
+  );
 };
