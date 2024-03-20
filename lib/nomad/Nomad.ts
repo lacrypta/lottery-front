@@ -2,7 +2,11 @@ import { EventEmitter } from "events";
 
 // Types
 import type { Event, Relay } from "nostr-tools";
-import type { NomadHandle, NomadRepoManifest } from "./types/nomad";
+import {
+  type NomadHandle,
+  type NomadRepoManifest,
+  NomadStatus,
+} from "./types/nomad";
 import { NomadKinds } from "./types/kinds";
 import { NomadRuntime } from "./NomadRuntime";
 
@@ -17,6 +21,7 @@ export class Nomad {
 
   public eventEmitter;
   public eventId: string;
+  public status: NomadStatus;
 
   constructor(
     codeEvent: Event,
@@ -28,9 +33,17 @@ export class Nomad {
     this.repoManifest = repoManifest;
     this.eventId = codeEvent.id;
     this.eventEmitter = eventEmitter || new EventEmitter();
+    this.status = NomadStatus.IDLE;
+  }
+
+  setStatus(status: NomadStatus) {
+    this.eventEmitter.emit("status", status);
+    this.status = status;
   }
 
   async init<T>(...args: any[]): Promise<T> {
+    this.setStatus(NomadStatus.BOOTING);
+
     this.nomadRuntime = new NomadRuntime(
       this.codeEvent.content,
       this.dependencies,
@@ -41,10 +54,12 @@ export class Nomad {
     try {
       await this.nomadRuntime.init();
     } catch (e) {
+      this.setStatus(NomadStatus.ERROR);
       console.error(e);
       throw new Error("Error initializing Nomad Runtime");
     }
 
+    this.setStatus(NomadStatus.RUNNING);
     this.eventEmitter.emit("nomad:init", args);
 
     return this.nomadRuntime.getRuntimeInterface<T>();
@@ -67,25 +82,34 @@ export class Nomad {
     relay: Relay,
     eventEmitter?: EventEmitter
   ) {
-    const handle = parseHandle(handleString);
-    const authorPubkey = await getHandlePubkey(handle!);
-    const repoManifest = await getRepoManifest(
-      authorPubkey,
-      handle!.repo,
-      relay
-    );
+    try {
+      eventEmitter?.emit("status", NomadStatus.HANDLE_RESOLVE);
+      const handle = parseHandle(handleString);
+      const authorPubkey = await getHandlePubkey(handle!);
 
-    // TODO: Proper sorting
-    const versions = Object.keys(repoManifest.versions).sort();
-    const latestVersion = versions[versions.length - 1];
+      eventEmitter?.emit("status", NomadStatus.REPO_MENIFEST);
+      const repoManifest = await getRepoManifest(
+        authorPubkey,
+        handle!.repo,
+        relay
+      );
 
-    const selectedVersion =
-      versions.find((v) => v === handle!.version) || latestVersion;
-    const eventId = repoManifest.versions[selectedVersion];
+      // TODO: Proper sorting
+      const versions = Object.keys(repoManifest.versions).sort();
+      const latestVersion = versions[versions.length - 1];
 
-    const codeEvent = await getCodeEvent(eventId, relay);
+      const selectedVersion =
+        versions.find((v) => v === handle!.version) || latestVersion;
+      const eventId = repoManifest.versions[selectedVersion];
 
-    return new Nomad(codeEvent, repoManifest);
+      eventEmitter?.emit("status", NomadStatus.CODE_EVENT);
+      const codeEvent = await getCodeEvent(eventId, relay);
+
+      return new Nomad(codeEvent, repoManifest, eventEmitter);
+    } catch (e) {
+      eventEmitter?.emit("status", NomadStatus.ERROR);
+      throw e;
+    }
   }
 
   static async fromEventId(
@@ -93,8 +117,9 @@ export class Nomad {
     relay: Relay,
     eventEmitter?: EventEmitter
   ) {
+    eventEmitter?.emit("status", NomadStatus.CODE_EVENT);
     const codeEvent = await getCodeEvent(eventId, relay);
-    return new Nomad(codeEvent);
+    return new Nomad(codeEvent, undefined, eventEmitter);
   }
 
   static async fromHandleOrEventId(
@@ -157,7 +182,7 @@ export async function getRepoManifest(
 
   const versions: { [key: string]: string } = {};
   event.tags
-    .find((tag) => tag[0].startsWith("version:"))
+    .filter((tag) => tag[0].startsWith("version:"))
     ?.forEach((tag) => {
       const version = tag[0].split(":")[1];
       const eventId = tag[1];
@@ -181,7 +206,7 @@ export async function getCodeEvent(
   });
 
   if (!event) {
-    throw new Error("Code Event not found");
+    throw new Error(`Code Event (${eventId}) not found`);
   }
 
   if (event.kind !== NomadKinds.NOMAD_CODE) {
