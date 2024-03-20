@@ -42,7 +42,7 @@ export const PlayersProvider = ({ children }: IPlayersProviderProps) => {
   const { blockHash } = useContext(BitcoinContext);
   const [players, setPlayers] = useState<string[]>([]);
 
-  const { lottery } = useNomad<ILotteryABI>(
+  const { lottery, isLoaded } = useNomad<ILotteryABI>(
     "1054c92c697c85e1947119fea1445668aa1a7ea9f13dd87c36613b694b52d8e9"
   );
 
@@ -94,7 +94,7 @@ export const PlayersProvider = ({ children }: IPlayersProviderProps) => {
         getWinners,
       }}
     >
-      {!lottery ? <div>Lottery nomad not ready</div> : children}
+      {!isLoaded ? <div>Loading Lottery Nomad...</div> : children}
     </PlayersContext.Provider>
   );
 };
