@@ -2,11 +2,7 @@ import { EventEmitter } from "events";
 
 // Types
 import type { Event, Relay } from "nostr-tools";
-import {
-  type NomadHandle,
-  type NomadRepoManifest,
-  NomadStatus,
-} from "./types/nomad";
+import { type NomadRepoManifest, NomadStatus } from "./types/nomad";
 import { NomadKinds } from "./types/kinds";
 import { NomadRuntime } from "./NomadRuntime";
 
@@ -77,29 +73,26 @@ export class Nomad {
     return await this.nomadRuntime.call(name, ...args);
   }
 
-  static async fromHandle(
-    handleString: string,
+  static async fromPubkey(
+    pubkey: string,
+    repoPath: string,
     relay: Relay,
     eventEmitter?: EventEmitter
   ) {
     try {
-      eventEmitter?.emit("status", NomadStatus.HANDLE_RESOLVE);
-      const handle = parseHandle(handleString);
-      const authorPubkey = await getHandlePubkey(handle!);
+      eventEmitter?.emit("status", NomadStatus.REPO_MANIFEST);
 
-      eventEmitter?.emit("status", NomadStatus.REPO_MENIFEST);
-      const repoManifest = await getRepoManifest(
-        authorPubkey,
-        handle!.repo,
-        relay
-      );
+      const [repoName, requestedVersion = "latest"] = repoPath.split("@");
+      const repoManifest = await getRepoManifest(pubkey, repoName, relay);
+
+      eventEmitter?.emit("repoManifest", repoManifest);
 
       // TODO: Proper sorting
       const versions = Object.keys(repoManifest.versions).sort();
       const latestVersion = versions[versions.length - 1];
 
       const selectedVersion =
-        versions.find((v) => v === handle!.version) || latestVersion;
+        versions.find((v) => v === requestedVersion) || latestVersion;
       const eventId = repoManifest.versions[selectedVersion];
 
       eventEmitter?.emit("status", NomadStatus.CODE_EVENT);
@@ -118,7 +111,10 @@ export class Nomad {
     eventEmitter?: EventEmitter
   ) {
     eventEmitter?.emit("status", NomadStatus.CODE_EVENT);
+
     const codeEvent = await getCodeEvent(eventId, relay);
+
+    eventEmitter?.emit("codeEvent", codeEvent);
     return new Nomad(codeEvent, undefined, eventEmitter);
   }
 
@@ -127,42 +123,33 @@ export class Nomad {
     relay: Relay,
     eventEmitter?: EventEmitter
   ) {
-    if (handleOrEventId.includes("@")) {
-      return this.fromHandle(handleOrEventId, relay, eventEmitter);
-    } else {
+    const [nip05OrPubkey, repoPath] = handleOrEventId.split("/");
+
+    if (!repoPath) {
+      // Must be eventId
       return this.fromEventId(handleOrEventId, relay, eventEmitter);
     }
+
+    let pubkey;
+    // Is NIP05 handle
+    if (nip05OrPubkey.includes("@")) {
+      pubkey = await resolveNip05(nip05OrPubkey);
+    } else {
+      pubkey = nip05OrPubkey;
+    }
+
+    return this.fromPubkey(pubkey, repoPath, relay, eventEmitter);
   }
 }
 
-export function parseHandle(handle: string): NomadHandle | null {
-  // Define the regular expression with capturing groups
-  const regex =
-    /^(?:([a-zA-Z0-9]+)@)?(.+)\/([a-zA-Z0-9]+)(?:@(latest|\d+(?:\.\d+)*))?$/;
-  const match = handle.match(regex);
-
-  if (match) {
-    // Extract matched groups with destructuring
-    const [, username, domainWithTLD, repo, version] = match;
-
-    return {
-      username,
-      domain: domainWithTLD,
-      repo,
-      version,
-    };
-  } else {
-    return null;
-  }
-}
-
-export async function getHandlePubkey(handle: NomadHandle): Promise<string> {
+export async function resolveNip05(handle: string): Promise<string> {
+  const [username, domain] = handle.split("@");
   const res = await fetch(
-    `https://${handle.domain}/.well-known/nostr.json?name=${handle.username}`
+    `https://${domain}/.well-known/nostr.json?name=${username}`
   );
   const data = await res.json();
 
-  return data.names[handle.username!] as string;
+  return data.names[username] as string;
 }
 
 export async function getRepoManifest(
@@ -170,11 +157,13 @@ export async function getRepoManifest(
   repoName: string,
   relay: Relay
 ): Promise<NomadRepoManifest> {
-  const event = await relay.get({
+  const filter = {
     authors: [authorPubkey],
     "#d": [`repo:${repoName}`],
     kinds: [NomadKinds.REPO_MANIFEST],
-  });
+  };
+
+  const event = await relay.get(filter);
 
   if (!event) {
     throw new Error("Repo manifest not found");
