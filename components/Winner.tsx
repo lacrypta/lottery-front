@@ -19,7 +19,7 @@ const WinnerDiv = styled.div`
 `;
 
 interface IWinnerProps {
-  value: number;
+  value: string;
 }
 
 const Winner = ({ value }: IWinnerProps) => {

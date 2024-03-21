@@ -1,5 +1,4 @@
 import CardGrid from "../../CardGrid";
-import Logo from "../../Logo";
 import React, { useContext, useEffect, useState } from "react";
 import { BitcoinContext } from "../../../contexts/Bitcoin";
 import { PlayersContext } from "../../../contexts/Players";
@@ -7,7 +6,6 @@ import { ConfigContext } from "../../../contexts/Config";
 import Countdown from "../../Countdown/Countdown";
 import Winner from "../../Winner";
 import Congratulations from "../../Congratulations";
-import Ticket from "../../Ticket";
 import NewBlock from "../../NewBlock";
 
 const COUNTDOWN_NUMBERS = 10;
@@ -29,7 +27,7 @@ const Play = () => {
   const [showWinnerInterval, setShowWinnerInterval] = useState<NodeJS.Timer>();
   const [winnerIndex, setWinnerIndex] = useState<number>(0);
 
-  const [currentWinner, setCurrentWinner] = useState<number>();
+  const [currentWinner, setCurrentWinner] = useState<string>();
   const [congratulationsVisible, setCongratulationsVisible] =
     useState<boolean>(false);
 
