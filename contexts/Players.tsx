@@ -8,7 +8,11 @@ import { db } from "../lib/firebase";
 import { useNomad } from "../hooks/useNomad";
 
 type ILotteryABI = {
-  lottery?: (seed: string, winners: number, players: string[]) => string[];
+  halve: (
+    seed: string,
+    weightedPlayers: { [player: string]: number }
+  ) => { [player: string]: number };
+  lottery: (seed: string, winners: number, players: string[]) => string[];
 };
 
 interface IPlayersContext {
@@ -42,9 +46,7 @@ export const PlayersProvider = ({ children }: IPlayersProviderProps) => {
   const { blockHash } = useContext(BitcoinContext);
   const [players, setPlayers] = useState<string[]>([]);
 
-  const { lottery, isLoaded } = useNomad<ILotteryABI>(
-    "1054c92c697c85e1947119fea1445668aa1a7ea9f13dd87c36613b694b52d8e9"
-  );
+  const { lottery, isLoaded } = useNomad<ILotteryABI>("timba@hodl.ar/lottery");
 
   const getWinners = async () => {
     if (!lottery) {
